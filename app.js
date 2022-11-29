@@ -36,7 +36,9 @@ app.get('/', (req, res) => {
  res.send('inde');
 });
 
-
+app.post('/',(req,res)=>{
+console.log(req.body);
+});
 
 
 const client = new Client({
