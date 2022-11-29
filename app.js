@@ -1,20 +1,20 @@
 const { Client, MessageMedia, LocalAuth } = require('whatsapp-web.js');
 const express = require('express');
 const { body, validationResult } = require('express-validator');
-const socketIO = require('socket.io');
-const qrcode = require('qrcode');
-const http = require('http');
+//const socketIO = require('socket.io');
+const qrcode = require('qrcode-terminal');
+//const http = require('http');
 const fs = require('fs');
 const { phoneNumberFormatter } = require('./helpers/formatter');
 const fileUpload = require('express-fileupload');
 const axios = require('axios');
 const mime = require('mime-types');
 
-const port = process.env.PORT || 8000;
+const port = 5000;
 
 const app = express();
-const server = http.createServer(app);
-const io = socketIO(server);
+//const server = http.createServer(app);
+//const io = socketIO(server);
 
 app.use(express.json());
 app.use(express.urlencoded({
@@ -33,10 +33,11 @@ app.use(fileUpload({
 }));
 
 app.get('/', (req, res) => {
-  res.sendFile('index.html', {
-    root: __dirname
-  });
+ res.send('inde');
 });
+
+
+
 
 const client = new Client({
   restartOnAuthFail: true,
@@ -56,109 +57,138 @@ const client = new Client({
   authStrategy: new LocalAuth()
 });
 
-client.on('message', msg => {
-  if (msg.body == '!ping') {
-    msg.reply('pong');
-  } else if (msg.body == 'good morning') {
-    msg.reply('selamat pagi');
-  } else if (msg.body == '!groups') {
-    client.getChats().then(chats => {
-      const groups = chats.filter(chat => chat.isGroup);
+// client.on('message', msg => {
+//   if (msg.body == '!ping') {
+//     msg.reply('pong');
+//   } else if (msg.body == 'good morning') {
+//     msg.reply('selamat pagi');
+//   } else if (msg.body == '!groups') {
+//     client.getChats().then(chats => {
+//       const groups = chats.filter(chat => chat.isGroup);
 
-      if (groups.length == 0) {
-        msg.reply('You have no group yet.');
-      } else {
-        let replyMsg = '*YOUR GROUPS*\n\n';
-        groups.forEach((group, i) => {
-          replyMsg += `ID: ${group.id._serialized}\nName: ${group.name}\n\n`;
-        });
-        replyMsg += '_You can use the group id to send a message to the group._'
-        msg.reply(replyMsg);
-      }
-    });
-  }
+//       if (groups.length == 0) {
+//         msg.reply('You have no group yet.');
+//       } else {
+//         let replyMsg = '*YOUR GROUPS*\n\n';
+//         groups.forEach((group, i) => {
+//           replyMsg += `ID: ${group.id._serialized}\nName: ${group.name}\n\n`;
+//         });
+//         replyMsg += '_You can use the group id to send a message to the group._'
+//         msg.reply(replyMsg);
+//       }
+//     });
+//   }
 
-  // NOTE!
-  // UNCOMMENT THE SCRIPT BELOW IF YOU WANT TO SAVE THE MESSAGE MEDIA FILES
-  // Downloading media
-  // if (msg.hasMedia) {
-  //   msg.downloadMedia().then(media => {
-  //     // To better understanding
-  //     // Please look at the console what data we get
-  //     console.log(media);
+//   // NOTE!
+//   // UNCOMMENT THE SCRIPT BELOW IF YOU WANT TO SAVE THE MESSAGE MEDIA FILES
+//   // Downloading media
+//   // if (msg.hasMedia) {
+//   //   msg.downloadMedia().then(media => {
+//   //     // To better understanding
+//   //     // Please look at the console what data we get
+//   //     console.log(media);
 
-  //     if (media) {
-  //       // The folder to store: change as you want!
-  //       // Create if not exists
-  //       const mediaPath = './downloaded-media/';
+//   //     if (media) {
+//   //       // The folder to store: change as you want!
+//   //       // Create if not exists
+//   //       const mediaPath = './downloaded-media/';
 
-  //       if (!fs.existsSync(mediaPath)) {
-  //         fs.mkdirSync(mediaPath);
-  //       }
+//   //       if (!fs.existsSync(mediaPath)) {
+//   //         fs.mkdirSync(mediaPath);
+//   //       }
 
-  //       // Get the file extension by mime-type
-  //       const extension = mime.extension(media.mimetype);
+//   //       // Get the file extension by mime-type
+//   //       const extension = mime.extension(media.mimetype);
         
-  //       // Filename: change as you want! 
-  //       // I will use the time for this example
-  //       // Why not use media.filename? Because the value is not certain exists
-  //       const filename = new Date().getTime();
+//   //       // Filename: change as you want! 
+//   //       // I will use the time for this example
+//   //       // Why not use media.filename? Because the value is not certain exists
+//   //       const filename = new Date().getTime();
 
-  //       const fullFilename = mediaPath + filename + '.' + extension;
+//   //       const fullFilename = mediaPath + filename + '.' + extension;
 
-  //       // Save to file
-  //       try {
-  //         fs.writeFileSync(fullFilename, media.data, { encoding: 'base64' }); 
-  //         console.log('File downloaded successfully!', fullFilename);
-  //       } catch (err) {
-  //         console.log('Failed to save the file:', err);
-  //       }
-  //     }
-  //   });
-  // }
-});
+//   //       // Save to file
+//   //       try {
+//   //         fs.writeFileSync(fullFilename, media.data, { encoding: 'base64' }); 
+//   //         console.log('File downloaded successfully!', fullFilename);
+//   //       } catch (err) {
+//   //         console.log('Failed to save the file:', err);
+//   //       }
+//   //     }
+//   //   });
+//   // }
+// });
 
 client.initialize();
 
 // Socket IO
-io.on('connection', function(socket) {
-  socket.emit('message', 'Connecting...');
+// io.on('connection', function(socket) {
+//   socket.emit('message', 'Connecting...');
 
   client.on('qr', (qr) => {
-    console.log('QR RECEIVED', qr);
-    qrcode.toDataURL(qr, (err, url) => {
-      socket.emit('qr', url);
-      socket.emit('message', 'QR Code received, scan please!');
-    });
+    qrcode.generate(qr, {small: true});
+    // qrcode.toDataURL(qr, (err, url) => {
+    //   socket.emit('qr', url);
+    //   socket.emit('message', 'QR Code received, scan please!');
+    //});
   });
 
-  client.on('ready', () => {
-    socket.emit('ready', 'Whatsapp is ready!');
-    socket.emit('message', 'Whatsapp is ready!');
+    client.on('ready', () => {
+//     socket.emit('ready', 'Whatsapp is ready!');
+//     socket.emit('message', 'Whatsapp is ready!');
+      console.log('Client is ready!');
   });
 
-  client.on('authenticated', () => {
-    socket.emit('authenticated', 'Whatsapp is authenticated!');
-    socket.emit('message', 'Whatsapp is authenticated!');
-    console.log('AUTHENTICATED');
-  });
+//   client.on('authenticated', () => {
+//     socket.emit('authenticated', 'Whatsapp is authenticated!');
+//     socket.emit('message', 'Whatsapp is authenticated!');
+//     console.log('AUTHENTICATED');
+//   });
 
-  client.on('auth_failure', function(session) {
-    socket.emit('message', 'Auth failure, restarting...');
-  });
+//   client.on('auth_failure', function(session) {
+//     socket.emit('message', 'Auth failure, restarting...');
+//   });
 
-  client.on('disconnected', (reason) => {
-    socket.emit('message', 'Whatsapp is disconnected!');
-    client.destroy();
-    client.initialize();
-  });
-});
+//   client.on('disconnected', (reason) => {
+//     socket.emit('message', 'Whatsapp is disconnected!');
+//     client.destroy();
+//     client.initialize();
+//   });
+// });
 
 
 const checkRegisteredNumber = async function(number) {
   const isRegistered = await client.isRegisteredUser(number);
   return isRegistered;
 }
+
+
+
+app.get('/send',(req,res)=>
+{
+  let tujuan = req.query.tujuan;
+  let pesan  = req.query.pesan;
+
+  tujuan= tujuan.substring(1);
+  tujuan= '62${tujuan}@c.us';
+  console.log(tujuan);
+  client.sendMessage (tujuan, pesan);
+  res.json({status: false});
+  console.log(pesan);
+
+  
+});
+
+
+
+// Create the endpoint for your webhook
+
+// app.post("/webhook", (req, res) => {
+//   let body = req.body;
+
+//   console.log(`\u{1F7EA} Received webhook:`);
+//   console.dir(body, { depth: null });
+// });
 
 // Send message
 app.post('/send-message', [
@@ -246,8 +276,7 @@ const findGroupByName = async function(name) {
   return group;
 }
 
-// Send message to group
-// You can use chatID or group name, yea!
+
 app.post('/send-group-message', [
   body('id').custom((value, { req }) => {
     if (!value && !req.body.name) {
@@ -256,7 +285,19 @@ app.post('/send-group-message', [
     return true;
   }),
   body('message').notEmpty(),
-], async (req, res) => {
+  
+]
+
+// body('number').notEmpty(),
+//   body('message').notEmpty(),
+// ], async (req, res) => {
+//   const errors = validationResult(req).formatWith(({
+//     msg
+//   }) => {
+//     return msg;
+//   });
+
+, async (req, res) => {
   const errors = validationResult(req).formatWith(({
     msg
   }) => {
@@ -342,6 +383,6 @@ app.post('/clear-message', [
   })
 });
 
-server.listen(port, function() {
+app.listen(port,()=> {
   console.log('App running on *: ' + port);
 });
