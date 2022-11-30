@@ -10,11 +10,32 @@ const fileUpload = require('express-fileupload');
 const axios = require('axios');
 const mime = require('mime-types');
 
+
+
+
+
+
 const port = process.env.PORT || 8000;
 
 const app = express();
 //const server = http.createServer(app);
 //const io = socketIO(server);
+
+
+
+const str = `*Firing*
+Value: [ metric='foo' labels={instance=bar} value=10 ]
+Labels:
+- alertname = TestAlert
+- instance = Grafana
+Annotations:
+- description = asq
+- summary = Notification test
+Silence: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/alerting/silence/new?alertmanager=grafana&matcher=alertname%3DTestAlert&matcher=instance%3DGrafana';
+`;
+
+const desc =(str.substring(131,144));
+
 
 app.use(express.json());
 app.use(express.urlencoded({
@@ -37,8 +58,11 @@ app.get('/', (req, res) => {
 });
 
 app.post('/',(req,res)=>{
-console.log('=====>',req.body.message,'<=====');
+//console.log('=====>',req.body.message,'<=====');
 res.status(200).json({ message: 'berhasil' })
+let message = req.body.message ;
+const desc =(message.substring(131,144));
+console.log('=====>',desc,'<======');
 });
 
 
