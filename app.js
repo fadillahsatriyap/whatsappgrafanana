@@ -230,7 +230,7 @@ app.post('/send-message', [
   //const words = str.split(' ');
   console.log('====>',str,'<========');
   const number = phoneNumberFormatter(str.split(':')[4].split(' ')[1]);
-  const message = str.split(':')[5].split(' ')[1];
+  const message = str.split(':')[5].split('\n')[0];
   console.log(number,'<1')
   console.log(message,'<2')
 
