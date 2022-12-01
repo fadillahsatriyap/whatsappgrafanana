@@ -238,7 +238,7 @@ app.post('/send-message', [
   '`;
   const words = str.split(' ');
   console.log('====>',str,'<========');
-  const number = phoneNumberFormatter(words[16]);
+  const number = phoneNumberFormatter(words[29]);
   const message = (words[31]);
   console.log(number,'<1')
   console.log(message,'<2')
