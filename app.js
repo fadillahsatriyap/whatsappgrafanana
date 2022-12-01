@@ -213,6 +213,7 @@ app.post('/send-message', [
   body('number'),
   body('message'),
 ], async (req, res) => {
+
   const errors = validationResult(req).formatWith(({
     msg
   }) => {
@@ -225,14 +226,19 @@ app.post('/send-message', [
       message: errors.mapped()
     });
   }
-  const str = req.body.message
+  const str = req.body.message;
   const words = str.split(' ');
   console.log('====>',str,'<========');
-  const number = phoneNumberFormatter(words[16]);
-  const message = (words[19]);
-  
-  // const number = phoneNumberFormatter(req.body.number);
-  // const message = req.body.message;
+  const number = phoneNumberFormatter(words[28]);
+  const message = (words[31]);
+  console.log(number,'<1')
+  console.log(message,'<2')
+
+  // const number2 = phoneNumberFormatter(req.body.number);
+  // const message2 = req.body.message;
+  // console.log(number2)
+  // console.log(message2)
+
 
   const isRegisteredNumber = await checkRegisteredNumber(number);
 
@@ -242,7 +248,7 @@ app.post('/send-message', [
       message: 'The number is not registered'
     });
   }
-
+//l
   client.sendMessage(number, message).then(response => {
     res.status(200).json({
       status: true,
