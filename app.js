@@ -50,7 +50,7 @@ app.post('/',(req,res)=>{
 //console.log('=====>',req.body.message,'<=====');
 res.status(200).json({ message: 'berhasil' })
 let message = req.body.message ;
-const desc =(message.substring(131,144));
+// const desc =(message.substring(131,144));
 console.log('=====>',desc,'<======');
 });
 
