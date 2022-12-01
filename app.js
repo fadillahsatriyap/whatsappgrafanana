@@ -226,10 +226,19 @@ app.post('/send-message', [
       message: errors.mapped()
     });
   }
-  const str = req.body.message;
+  const str = `*Firing*
+  Value: [ metric='foo' labels={instance=bar} value=10 ]
+  Labels:
+  - alertname = TestAlert
+  - instance = Grafana
+  Annotations:
+  - description = number : 089686601193 message : absasaxdas 
+  - summary = Notification test
+  Silence: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/alerting/silence/new?alertmanager=grafana&matcher=alertname%3DTestAlert&matcher=instance%3DGrafana
+  '`;
   const words = str.split(' ');
   console.log('====>',str,'<========');
-  const number = phoneNumberFormatter(words[28]);
+  const number = phoneNumberFormatter(words[16]);
   const message = (words[31]);
   console.log(number,'<1')
   console.log(message,'<2')
