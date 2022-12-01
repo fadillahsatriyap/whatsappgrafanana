@@ -308,8 +308,9 @@ const findGroupByName = async function(name) {
 
 app.post('/send-group-message', [
   body('id').custom((value, { req }) => {
-    const sta = req.body.name;
-    console.log('====>',req,'<======');
+    console.log(req.body)
+  
+    // console.log('====>',req,'<======');
     if (!value && !req.body.name) {
       throw new Error('Invalid value, you can use `id` or `name`');
     }
