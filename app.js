@@ -23,18 +23,7 @@ const app = express();
 
 
 
-const str = `*Firing*
-Value: [ metric='foo' labels={instance=bar} value=10 ]
-Labels:
-- alertname = TestAlert
-- instance = Grafana
-Annotations:
-- description = asq
-- summary = Notification test
-Silence: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/alerting/silence/new?alertmanager=grafana&matcher=alertname%3DTestAlert&matcher=instance%3DGrafana';
-`;
 
-const desc =(str.substring(131,144));
 
 
 app.use(express.json());
@@ -64,6 +53,8 @@ let message = req.body.message ;
 const desc =(message.substring(131,144));
 console.log('=====>',desc,'<======');
 });
+
+
 
 
 const client = new Client({
@@ -219,8 +210,8 @@ app.get('/send',(req,res)=>
 
 // Send message
 app.post('/send-message', [
-  body('number').notEmpty(),
-  body('message').notEmpty(),
+  body('number'),
+  body('message'),
 ], async (req, res) => {
   const errors = validationResult(req).formatWith(({
     msg
@@ -234,9 +225,13 @@ app.post('/send-message', [
       message: errors.mapped()
     });
   }
-
-  const number = phoneNumberFormatter(req.body.number);
-  const message = req.body.message;
+  const str = req.body.message
+  const words = str.split(' ');
+  console.log('====>',str,'<========');
+  const number = phoneNumberFormatter(words[16]);
+  const message = (words[19]);
+  // const number = phoneNumberFormatter(req.body.number);
+  // const message = req.body.message;
 
   const isRegisteredNumber = await checkRegisteredNumber(number);
 
