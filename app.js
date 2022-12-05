@@ -223,8 +223,8 @@ app.post('/send-message', [
   const str = req.body.message;
   //const words = str.split(' ');
   console.log('====>',str,'<========');
-  const number = phoneNumberFormatter(str.split(':')[4].split(' ')[1]);
-  const message = str.split(':')[5].split('\n')[0];
+  const number = phoneNumberFormatter(str.split('=')[16].split('\n')[0]);
+  const message = str.split('=')[17].split('\n')[0];
   console.log(number,'<1')
   console.log(message,'<2')
 
