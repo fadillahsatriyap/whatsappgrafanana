@@ -331,16 +331,7 @@ app.post('/send-group-message', [
     });
   }
    
-  const msgGroup = `Firing
-  Value: [ metric='foo' labels={instance=bar} value=10 ]
-  Labels:
-  - alertname = TestAlert
-  - instance = Grafana
-  Annotations:
-  - description = name = oi caption = absasaxdas file = https://cdn.pixabay.com/photo/2020/06/21/18/23/pixabay-5326193_960_720.png
-  - summary = Notification test
-  Silence: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/alerting/silence/new?alertmanager=grafana&matcher=alertname%3DTestAlert&matcher=instance%3DGrafana
-  '`;
+  const msgGroup = req.body.message;
   //const words = str.split(' ');
   const groupName =   msgGroup.split('=')[8].split(' ')[1];
   const caption = msgGroup.split('=')[9].split('file')[0];
