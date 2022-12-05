@@ -200,7 +200,7 @@ const checkRegisteredNumber = async function(number) {
 
 //   console.log(`\u{1F7EA} Received webhook:`);
 //   console.dir(body, { depth: null });
-// });
+// });//
 
 // Send message
 app.post('/send-message', [
