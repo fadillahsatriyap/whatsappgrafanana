@@ -225,10 +225,11 @@ app.post('/send-message', [
   //const words = str.split(' ');
   console.log('====>',str,'<========');
   const number = phoneNumberFormatter(str.split('=')[16].split('\n')[0]);
+  const message0 = str.split('=')[15].split('\n')[0];
   const message1 = str.split('=')[17].split('\n')[0];
   const message2 = str.split('=')[18].split('\n')[0];
 
-  const message =  `Error = ${message1}\nSuccess = ${message2}`
+  const message =  `=== HANA MDW MONITORING${caption0} ==\nError = ${caption1}\nSuccess = ${caption2}`
 
   console.log(number,'<1')
   console.log(message,'<2')

@@ -16,9 +16,10 @@ Panel: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/d/OeHCtCD4k?viewP
 `;
 
 const number = str.split('=')[16].split('\n')[0];
+const caption0 = str.split('=')[15].split('\n')[0];
 const caption1 = str.split('=')[17].split('\n')[0];
 const caption2 = str.split('=')[18].split('\n')[0];
 
-const message =  `Error = ${caption1}\nSuccess = ${caption2}`
+const message =  `=== HANA MDW MONITORING${caption0} ==\nError = ${caption1}\nSuccess = ${caption2}`
 console.log(message)
 console.log(number)
