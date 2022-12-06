@@ -221,10 +221,15 @@ app.post('/send-message', [
     });
   }
   const str = req.body.message;
+  
   //const words = str.split(' ');
   console.log('====>',str,'<========');
   const number = phoneNumberFormatter(str.split('=')[16].split('\n')[0]);
-  const message = str.split('=')[17].split('\n')[0];
+  const message1 = str.split('=')[17].split('\n')[0];
+  const message2 = str.split('=')[18].split('\n')[0];
+
+  const message =  `Error = ${message1}\nSuccess = ${message2}`
+
   console.log(number,'<1')
   console.log(message,'<2')
 
