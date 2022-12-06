@@ -229,7 +229,7 @@ app.post('/send-message', [
   const message1 = str.split('=')[17].split('\n')[0];
   const message2 = str.split('=')[18].split('\n')[0];
 
-  const message =  `=== HANA MDW MONITORING${message0} ==\nError = ${caption1}\nSuccess = ${caption2}`
+  const message =  `=== HANA MDW MONITORING${message0} ==\nError = ${message1}\nSuccess = ${message2}`
 
   console.log(number,'<1')
   console.log(message,'<2')
