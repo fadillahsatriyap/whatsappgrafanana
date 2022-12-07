@@ -4,6 +4,7 @@ const { body, validationResult } = require('express-validator');
 //const socketIO = require('socket.io');
 const qrcode = require('qrcode-terminal');
 //const http = require('http');
+//const http = require("node:http");
 const fs = require('fs');
 const { phoneNumberFormatter } = require('./helpers/formatter');
 const fileUpload = require('express-fileupload');
@@ -41,7 +42,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/',(req,res)=>{
-console.log('=====>',req.body.message,'<=====');
+console.log('=====>',req.body,'<=====');
 res.status(200).json({ message: 'berhasil' })
 //let message = req.body.message ;
 // const desc =(message.substring(131,144));
@@ -220,17 +221,60 @@ app.post('/send-message', [
       message: errors.mapped()
     });
   }
-  const str = req.body.message;
+  const str = `**Firing**
+
+  Value: [ var='totalsuccess' labels={} value=23 ], [ var='totalerror' labels={} value=11 ], [ var='total' labels={} value=34 ], [ var='treshold' labels={} value=32.35294117647059 ], [ var='istrue' labels={} value=1 ]
+  Labels:
+   - alertname = Gibi
+   - grafana_folder = DEVGIBI
+  Annotations:
+   - description = GIBI Transactions
+  number = 089686601193
+  
+  Gibi in 5 minutes has = 32.35294117647059% timeout rate transactions
+  Error = 11
+  Success = 23
+  Total = 34
+  Source: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/alerting/grafana/dNF02Cv4k/view
+  Silence: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/alerting/silence/new?alertmanager=grafana&matcher=alertname%3DGibi&matcher=grafana_folder%3DDEVGIBI
+  Dashboard: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/d/OeHCtCD4k
+  Panel: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/d/OeHCtCD4k?viewPanel=2
+  `;
   
   //const words = str.split(' ');
-  console.log('====>',str,'<========');
-  const number = phoneNumberFormatter(str.split('=')[16].split('\n')[0]);
-  const message0 = str.split('=')[15].split('\n')[0];
-  const message1 = str.split('=')[17].split('\n')[0];
-  const message2 = str.split('=')[18].split('\n')[0];
+  // console.log('====>',str,'<========');
+  // const number = phoneNumberFormatter(str.split('=')[16].split('\n')[0]);
+  // const message0 = str.split('=')[15].split('\n')[0];
+  // const message1 = str.split('=')[17].split('\n')[0];
+  // const message2 = str.split('=')[18].split('\n')[0];
 
-  const message =  `=== HANA MDW MONITORING${message0} ==\nError = ${message1}\nSuccess = ${message2}`
+  // const message =  `=== HANA MDW MONITORING${message0} ==\nError = ${message1}\nSuccess = ${message2}`
 
+   console.log('====>',str,'<========');
+   const number = phoneNumberFormatter(str.split('=')[19].split('\n')[0]);
+   const caption0 = str.split('=')[18].split('\n')[0];
+   const caption1 = str.split('=')[21].split('\n')[0];
+   const caption2 = str.split('=')[22].split('\n')[0];
+   const caption3 = str.split(`=`)[20].split(`%`)[0];
+   const caption4 = str.split('=')[23].split('\n')[0];
+   const caption5 = str.split(`\n`)[0];
+   const link     = str.split('Source:')[1].split('\n')[0];
+   const link1    = str.split('Silence:')[1].split('\n')[0];
+   const link2    = str.split('Dashboard:')[1].split('\n')[0];
+   const link3    = str.split('Panel:')[1].split('\n')[0];
+
+  let message;
+  if (caption5 == '**Firing**') {
+    let tempMessage = `*=== HANA MDW MONITORING${caption0} ==*\n \n\n*Decription*: ${caption0} in 5 minutes has ${caption3}% timeout rate transactions\n \n\n Error   = ${caption1}\n Success = ${caption2} \n Total   = ${caption4} \n\n *Summary*: ${caption0} timeout treshold above 5%\n\n  *====  Please Check Monitoring!‼️  ===*  
+    \nSource      : ${link} \n\nSilence     : ${link1} \n\nDashboard   : ${link2} \n\nPanel       : ${link3}`;
+    // console.log(tempMessage);
+    message = tempMessage
+  } else {
+    let tempMessage = `=== HANA MDW MONITORING${caption0} ==\n \n\n*Decription*: ${caption0} in 5 minutes has ${caption3}% timeout rate transactions\n \n\n Error   = ${caption1}\n Success = ${caption2} \n Total   = ${caption4} \n\n *Summary*: ${caption0} timeout treshold above 5%\n\n *==== Now It's OKayy!‼️ ===*
+    \nSource      : ${link} \n\nSilence     : ${link1} \n\nDashboard   : ${link2} \n\nPanel       : ${link3}`; 
+    // console.log(tempMessage)
+    message = tempMessage
+  }
   console.log(number,'<1')
   console.log(message,'<2')
 
@@ -262,20 +306,47 @@ app.post('/send-message', [
   });
 });
 
+
+// app.get("/image", function(req, res){
+//   const url = "http://dev-middleware-api.hanabank.co.id/mdw-monitoring/render/d-solo/1YPm51H4z/mdw?from=1670387670795&height=500&orgId=1&panelId=2&refresh=1m&to=1670388564026&tz=Asia%2FBangkok&width=1000";
+
+//   https.get(url, function(response){
+
+//     response.on("data", function(data){
+//       const weatherData = JSON.parse(data)
+//       const icon = weatherData.weather[0].icon
+//       const imageUrl = "http://dev-middleware-api.hanabank.co.id" + icon + "@2x.png"
+
+//       res.write("<img src=" + imageUrl + " ></img>")
+//       res.send();
+//     })
+//   });
+//})
+
 // Send media
 app.post('/send-media', async (req, res) => {
-  const str = req.body.message;
+  const str =    `Firing
+    Value: [ metric='foo' labels={instance=bar} value=10 ]
+    Labels:
+    - alertname = TestAlert
+    - instance = Grafana
+    Annotations:
+    - description = number = 089686601193 caption = absasaxdas file = http://dev-middleware-api.hanabank.co.id/mdw-monitoring/render/d-solo/1YPm51H4z/mdw?from=1670387670795&height=500&orgId=1&panelId=2&refresh=1m&to=1670388564026&tz=Asia%2FBangkok&width=1000
+    - summary = Notification test
+    Silence: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/alerting/silence/new?alertmanager=grafana&matcher=alertname%3DTestAlert&matcher=instance%3DGrafana
+    '`
+  ;
   //const words = str.split(' ');
   console.log('====>',str,'<========');
   const number = phoneNumberFormatter(str.split('=')[8].split(' ')[1]);
   const caption = str.split('=')[9].split('file')[0];
-  const fileUrl = str.split('=')[10].split('\n')[0];
+  const fileUrl = str.split('file =')[1].split('\n')[0];
   console.log(number,'<1')
   console.log(fileUrl,'<2')
 
 
 
-  // const number1 = phoneNumberFormatter(req.body.number);
+  // const number = phoneNumberFormatter(req.body.number);
   // console.log(req.body.number)
   // const caption = req.body.caption;
   // const fileUrl = req.body.file;
@@ -317,6 +388,93 @@ const findGroupByName = async function(name) {
   return group;
 }
 
+// app.post('/send-group-message', [
+//   body('id').custom((value, { req }) => {
+//   return true;
+//   }),
+//   body('message').notEmpty(),
+// ]
+// , async (req, res) => {
+//   const errors = validationResult(req).formatWith(({
+//     msg
+//   }) => {
+//     return msg;
+//   });
+
+//   if (!errors.isEmpty()) {
+//     return res.status(422).json({
+//       status: false,
+//       message: errors.mapped()
+//     });
+//   }
+   
+//   const msgGroup =  `Firing
+//     Value: [ metric='foo' labels={instance=bar} value=10 ]
+//     Labels:
+//     - alertname = TestAlert
+//     - instance = Grafana
+//     Annotations:
+//     - description = name = oi caption = absasaxdas file = https://cdn.pixabay.com/photo/2020/06/21/18/23/pixabay-5326193_960_720.png
+//     - summary = Notification test
+//     Silence: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/alerting/silence/new?alertmanager=grafana&matcher=alertname%3DTestAlert&matcher=instance%3DGrafana
+//     '`;
+//   //const words = str.split(' ');
+//   const groupName =   msgGroup.split('=')[8].split(' ')[1];
+//   const caption = msgGroup.split('=')[9].split('file')[0];
+//   const fileUrl = msgGroup.split('=')[10].split('\n')[0];
+//   console.log(groupName,'<1')
+//   console.log(caption,'<2')
+//   console.log(fileUrl,'<3')
+//   // console.log('====>',req,'<======');
+
+//   let chatId = req.body.id;
+//   // const groupName = req.body.name;
+//   // const message = req.body.message;
+
+//   // Find the group by name
+//   if (!chatId) {
+//     const group = await findGroupByName(groupName);
+//     if (!group) {
+//       return res.status(422).json({
+//         status: false,
+//         message: 'No group found with name: ' + groupName
+//       });
+//     }
+//     chatId = group.id._serialized;
+//   }
+
+//   let mimetype;
+//   const attachment = await axios.get(fileUrl, {
+//     responseType: 'arraybuffer'
+//   }).then(response => {
+//     mimetype = response.headers['content-type'];
+//     return response.data.toString('base64');
+//   });
+
+//   const media = new MessageMedia(mimetype, attachment, 'Media');
+  
+
+//   client.sendMessage(chatId, media,  {
+//     caption: caption
+//   } ).then(response => {
+//     res.status(200).json({
+//       status: true,
+//       response: response
+//     });
+//     console.log(caption,'<4')
+//   }).catch(err => {
+//     res.status(500).json({
+//       status: false,
+//       response: err
+//     });
+//   });
+// });
+
+
+// Clearing message on spesific chat
+
+
+
 app.post('/send-group-message', [
   body('id').custom((value, { req }) => {
   return true;
@@ -330,14 +488,23 @@ app.post('/send-group-message', [
     return msg;
   });
 
-  if (!errors.isEmpty()) {
-    return res.status(422).json({
-      status: false,
-      message: errors.mapped()
-    });
-  }
+  // if (!errors.isEmpty()) {
+  //   return res.status(422).json({
+  //     status: false,
+  //     message: errors.mapped()
+  //   });
+  // }
    
-  const msgGroup = req.body.message;
+  const msgGroup =  `Firing
+    Value: [ metric='foo' labels={instance=bar} value=10 ]
+    Labels:
+    - alertname = TestAlert
+    - instance = Grafana
+    Annotations:
+    - description = name = oi caption = absasaxdas file = https://cdn.pixabay.com/photo/2020/06/21/18/23/pixabay-5326193_960_720.png
+    - summary = Notification test
+    Silence: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/alerting/silence/new?alertmanager=grafana&matcher=alertname%3DTestAlert&matcher=instance%3DGrafana
+    '`;
   //const words = str.split(' ');
   const groupName =   msgGroup.split('=')[8].split(' ')[1];
   const caption = msgGroup.split('=')[9].split('file')[0];
@@ -391,7 +558,11 @@ app.post('/send-group-message', [
 });
 
 
-// Clearing message on spesific chat
+
+
+
+
+
 app.post('/clear-message', [
   body('number').notEmpty(),
 ], async (req, res) => {
