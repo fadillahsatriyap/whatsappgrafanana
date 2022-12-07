@@ -205,10 +205,11 @@ const checkRegisteredNumber = async function(number) {
 
 // Send message
 app.post('/send-message', [
+
   body('number'),
   body('message'),
 ], async (req, res) => {
-
+  console.log ('====>',req.body,`<====`)
   const errors = validationResult(req).formatWith(({
     msg
   }) => {
