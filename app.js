@@ -42,7 +42,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/',(req,res)=>{
-console.log('=====>',req.body,'<=====');
+console.log('=====>',req.body.message,'<=====');
 res.status(200).json({ message: 'berhasil' })
 //let message = req.body.message ;
 // const desc =(message.substring(131,144));
@@ -205,11 +205,10 @@ const checkRegisteredNumber = async function(number) {
 
 // Send message
 app.post('/send-message', [
-
   body('number'),
   body('message'),
 ], async (req, res) => {
-  console.log ('====>',req.body,`<====`)
+
   const errors = validationResult(req).formatWith(({
     msg
   }) => {
@@ -564,21 +563,21 @@ app.post('/send-group-message', [
 
 
 
-app.post('/clear-message', [
-  body('number').notEmpty(),
-], async (req, res) => {
-  const errors = validationResult(req).formatWith(({
-    msg
-  }) => {
-    return msg;
-  });
+// app.post('/clear-message', [
+//   body('number').notEmpty(),
+// ], async (req, res) => {
+//   const errors = validationResult(req).formatWith(({
+//     msg
+//   }) => {
+//     return msg;
+//   });
 
-  if (!errors.isEmpty()) {
-    return res.status(422).json({
-      status: false,
-      message: errors.mapped()
-    });
-  }
+//   if (!errors.isEmpty()) {
+//     return res.status(422).json({
+//       status: false,
+//       message: errors.mapped()
+//     });
+//   }
 
   const number = phoneNumberFormatter(req.body.number);
 
