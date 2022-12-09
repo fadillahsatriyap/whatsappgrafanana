@@ -171,3 +171,60 @@ app.post('/send-group-message', [
 //       });
 //     });
 //   });
+
+
+
+// app.post('/send-media', async (req, res) => {
+//   const str =    `Firing
+//     Value: [ metric='foo' labels={instance=bar} value=10 ]
+//     Labels:
+//     - alertname = TestAlert
+//     - instance = Grafana
+//     Annotations:
+//     - description = number = 089686601193 caption = absasaxdas file = http://dev-middleware-api.hanabank.co.id/mdw-monitoring/render/d-solo/1YPm51H4z/mdw?from=1670387670795&height=500&orgId=1&panelId=2&refresh=1m&to=1670388564026&tz=Asia%2FBangkok&width=1000
+//     - summary = Notification test
+//     Silence: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/alerting/silence/new?alertmanager=grafana&matcher=alertname%3DTestAlert&matcher=instance%3DGrafana
+//     '`
+//   ;
+//   //const words = str.split(' ');
+//   console.log('====>',str,'<========');
+//   const number = phoneNumberFormatter(str.split('=')[8].split(' ')[1]);
+//   const caption = str.split('=')[9].split('file')[0];
+//   const fileUrl = str.split('file =')[1].split('\n')[0];
+//   console.log(number,'<1')
+//   console.log(fileUrl,'<2')
+
+
+
+//   // const number = phoneNumberFormatter(req.body.number);
+//   // console.log(req.body.number)
+//   // const caption = req.body.caption;
+//   // const fileUrl = req.body.file;
+
+//   // const media = MessageMedia.fromFilePath('./image-example.png');
+//   // const file = req.files.file;
+//   // const media = new MessageMedia(file.mimetype, file.data.toString('base64'), file.name);
+//   let mimetype;
+//   const attachment = await axios.get(fileUrl, {
+//     responseType: 'arraybuffer'
+//   }).then(response => {
+//     mimetype = response.headers['content-type'];
+//     return response.data.toString('base64');
+//   });
+
+//   const media = new MessageMedia(mimetype, attachment, 'Media');
+
+//   client.sendMessage(number, media, {
+//     caption: caption
+//   }).then(response => {
+//     res.status(200).json({
+//       status: true,
+//       response: response
+//     });
+//   }).catch(err => {
+//     res.status(500).json({
+//       status: false,
+//       response: err
+//     });
+//   });
+// });

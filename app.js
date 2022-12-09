@@ -325,22 +325,20 @@ app.post('/send-message', [
 
 // Send media
 app.post('/send-media', async (req, res) => {
-  const str =    `Firing
-    Value: [ metric='foo' labels={instance=bar} value=10 ]
-    Labels:
-    - alertname = TestAlert
-    - instance = Grafana
-    Annotations:
-    - description = number = 089686601193 caption = absasaxdas file = http://dev-middleware-api.hanabank.co.id/mdw-monitoring/render/d-solo/1YPm51H4z/mdw?from=1670387670795&height=500&orgId=1&panelId=2&refresh=1m&to=1670388564026&tz=Asia%2FBangkok&width=1000
-    - summary = Notification test
-    Silence: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/alerting/silence/new?alertmanager=grafana&matcher=alertname%3DTestAlert&matcher=instance%3DGrafana
-    '`
-  ;
+  const str =    req.body.message;
   //const words = str.split(' ');
   console.log('====>',str,'<========');
-  const number = phoneNumberFormatter(str.split('=')[8].split(' ')[1]);
-  const caption = str.split('=')[9].split('file')[0];
-  const fileUrl = str.split('file =')[1].split('\n')[0];
+  const number = phoneNumberFormatter(str.split('=')[25].split('\n')[0]);
+  const fileUrl1= str.split('time_start = ')[1].split('\n')[0];
+  const fileUrl2= str.split('time_end = ')[1].split('\n')[0];
+  //const fileUrl = str.split('file =')[1].split(`\n`)[0];
+  const caption0 = str.split('=')[27].split('\n')[0];
+  const caption1 = str.split('=')[28].split('\n')[0];
+  const caption2 = str.split('=')[28].split('\n')[0];
+  const caption3 = str.split('=')[24].split('\n')[0];
+  const caption =  `=== HANA MDW MONITORING${caption3} ==\nError = ${caption0}\nSuccess = ${caption1}\nTotal = ${caption2} \n==== *Please Check Monitoring!‼️* === }`
+  const fileUrl = `http://dev-middleware-api.hanabank.co.id/mdw-monitoring/render/d-solo/OeHCtCD4k/dev?from=${fileUrl1}&height=500&orgId=5&panelId=2&to=${fileUrl2}&tz=Asia%2FBangkok&width=1000`
+  
   console.log(number,'<1')
   console.log(fileUrl,'<2')
 
