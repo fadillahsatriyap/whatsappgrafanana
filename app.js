@@ -325,7 +325,7 @@ app.post('/send-message', [
 
 // Send media
 app.post('/send-media', async (req, res) => {
-  const str =    req.body.message;
+  const str =  req.body.message;
   //const words = str.split(' ');
   console.log('====>',str,'<========');
   const number = phoneNumberFormatter(str.split('=')[25].split('\n')[0]);
@@ -337,7 +337,7 @@ app.post('/send-media', async (req, res) => {
   const caption2 = str.split('=')[28].split('\n')[0];
   const caption3 = str.split('=')[24].split('\n')[0];
   const caption =  `=== HANA MDW MONITORING${caption3} ==\nError = ${caption0}\nSuccess = ${caption1}\nTotal = ${caption2} \n==== *Please Check Monitoring!‼️* === }`
-  const fileUrl = `http://dev-middleware-api.hanabank.co.id/mdw-monitoring/render/d-solo/OeHCtCD4k/dev?from=${fileUrl1}&height=500&orgId=5&panelId=2&to=${fileUrl2}&tz=Asia%2FBangkok&width=1000`
+  const fileUrl = `http://dev-middleware-api.hanabank.co.id/mdw-monitoring/render/d-solo/1YPm51H4z/mdw?from=${fileUrl1}&height=500&orgId=1&panelId=2&refresh=1m&to=${fileUrl2}&tz=Asia%2FBangkok&width=1000`
   
   console.log(number,'<1')
   console.log(fileUrl,'<2')
