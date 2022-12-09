@@ -563,21 +563,21 @@ app.post('/send-group-message', [
 
 
 
-// app.post('/clear-message', [
-//   body('number').notEmpty(),
-// ], async (req, res) => {
-//   const errors = validationResult(req).formatWith(({
-//     msg
-//   }) => {
-//     return msg;
-//   });
+app.post('/clear-message', [
+  body('number').notEmpty(),
+], async (req, res) => {
+  const errors = validationResult(req).formatWith(({
+    msg
+  }) => {
+    return msg;
+  });
 
-//   if (!errors.isEmpty()) {
-//     return res.status(422).json({
-//       status: false,
-//       message: errors.mapped()
-//     });
-//   }
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      status: false,
+      message: errors.mapped()
+    });
+  }
 
   const number = phoneNumberFormatter(req.body.number);
 
