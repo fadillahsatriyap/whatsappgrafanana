@@ -348,7 +348,7 @@ app.post('/send-media', async (req, res) => {
   // console.log(req.body.number)
   // const caption = req.body.caption;
   // const fileUrl = req.body.file;
-
+//
   // const media = MessageMedia.fromFilePath('./image-example.png');
   // const file = req.files.file;
   // const media = new MessageMedia(file.mimetype, file.data.toString('base64'), file.name);
