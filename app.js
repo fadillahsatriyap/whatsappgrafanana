@@ -328,33 +328,73 @@ app.post('/send-media', async (req, res) => {
   const str =  req.body.message;
   //const words = str.split(' ');
   console.log('====>',str,'<========');
-  const number = phoneNumberFormatter(str.split('=')[25].split('\n')[0]);
+  const number = phoneNumberFormatter(str.split('=')[26].split('\n')[0]);
   const fileUrl1= str.split('time_start = ')[1].split('\n')[0];
   const fileUrl2= str.split('time_end = ')[1].split('\n')[0];
+  const panel = str.split('/d/')[1].split('\n')[0];
+  const panel1 = str.split('viewPanel=')[1].split('\n')[0];
+  const orgId = str.split(`Org = `)[1].split(`\n`)[0];
   //const fileUrl = str.split('file =')[1].split(`\n`)[0];
-  const caption0 = str.split('=')[27].split('\n')[0];
-  const caption1 = str.split('=')[28].split('\n')[0];
+  // const caption0 = str.split('=')[27].split('\n')[0];
+  // const caption1 = str.split('=')[28].split('\n')[0];
+  // const caption2 = str.split('=')[28].split('\n')[0];
+  // const caption3 = str.split('=')[24].split('\n')[0];
+  const caption0 = str.split('=')[25].split('\n')[0];
+  const caption1 = str.split('=')[27].split('%')[0];
   const caption2 = str.split('=')[28].split('\n')[0];
-  const caption3 = str.split('=')[24].split('\n')[0];
-  const caption =  `=== HANA MDW MONITORING${caption3} ==\nError = ${caption0}\nSuccess = ${caption1}\nTotal = ${caption2} \n==== *Please Check Monitoring!‼️* === }`
-  const fileUrl = `http://dev-middleware-api.hanabank.co.id/mdw-monitoring/render/d-solo/1YPm51H4z/mdw?from=${fileUrl1}&height=500&orgId=1&panelId=2&refresh=1m&to=${fileUrl2}&tz=Asia%2FBangkok&width=1000`
+  const caption3 = str.split('=')[29].split('\n')[0];
+  const caption4 = str.split('=')[30].split('\n')[0];
+  const caption5 = str.split(`\n`)[0];
+  const link     = str.split('Source:')[1].split('\n')[0];
+  const link2    = str.split('Dashboard:')[1].split('\n')[0];
+  const link3    = str.split('Panel:')[1].split('\n')[0];
+  //const caption =  `=== HANA MDW MONITORING${caption3} ==\nError = ${caption0}\nSuccess = ${caption1}\nTotal = ${caption2} \n==== *Please Check Monitoring!‼️* === }`
+    let caption;
+  if (caption5 == ' **Firing**') {
+    let tempMessage = `*=== HANA MDW MONITORING${caption0} ==*\n \n\n*Decription*: ${caption0} in 5 minutes has ${caption1}% timeout rate transactions\n \n\n Error   = ${caption2}\n Success = ${caption3} \n Total   = ${caption4} \n\n *Summary*: ${caption0} timeout treshold above 5%\n\n  *====  Please Check Monitoring!‼️  ===*  
+    \nSource      : ${link}  \n\nDashboard   : ${link2} \n\nPanel       : ${link3}`;
+    // console.log(tempMessage);
+    caption = tempMessage
+  } else {
+    let tempMessage = `=== HANA MDW MONITORING${caption0} ==\n \n\n*Decription*: ${caption0} in 5 minutes has ${caption1}% timeout rate transactions\n \n\n Error   = ${caption2}\n Success = ${caption3} \n Total   = ${caption4} \n\n *Summary*: ${caption0} timeout treshold above 5%\n\n *==== Now It's OKayy!‼️ ===*
+    \nSource      : ${link}  \n\nDashboard   : ${link2} \n\nPanel       : ${link3}`; 
+    // console.log(tempMessage)
+    caption = tempMessage
+  }
+  
+  
+  
+  const fileUrl = `http://dev-middleware-api.hanabank.co.id/mdw-monitoring/render/d-solo/${panel}/mdw?orgId=${orgId}&refresh=1m&from=${fileUrl1}&to=${fileUrl2}&panelId=${panel1}&width=1000&height=500&tz=Asia%2FBangkok`
+  //const token = `eyJrIjoiM2V3VVJlMlFCZnNMRG9kQUtYeGR6THhKUGd0Zm5vWDciLCJuIjoiY2FwdHVyZSIsImlkIjo1fQ==`;
   
   console.log(number,'<1')
   console.log(fileUrl,'<2')
+  console.log(orgId,`<3`)
+  
+  let token;
+  if(orgId =='5'){
+    token = 'eyJrIjoiM2V3VVJlMlFCZnNMRG9kQUtYeGR6THhKUGd0Zm5vWDciLCJuIjoiY2FwdHVyZSIsImlkIjo1fQ=='
+  }else if (orgId=='1'){
+    token = `glsa_A3LzmJIOMe92vRLuktAwnoqef0RsTtwy_842a36e3`
+  }else(
+    console.log(`Orgid tidak ditemukan`)
+    )
 
-
+  console.log(token,`<3`)
+  
 
   // const number = phoneNumberFormatter(req.body.number);
   // console.log(req.body.number)
   // const caption = req.body.caption;
   // const fileUrl = req.body.file;
-//
+
   // const media = MessageMedia.fromFilePath('./image-example.png');
   // const file = req.files.file;
   // const media = new MessageMedia(file.mimetype, file.data.toString('base64'), file.name);
   let mimetype;
   const attachment = await axios.get(fileUrl, {
-    responseType: 'arraybuffer'
+    responseType: 'arraybuffer',
+    headers: { Authorization: `Bearer ${token}` }
   }).then(response => {
     mimetype = response.headers['content-type'];
     return response.data.toString('base64');
