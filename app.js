@@ -270,14 +270,13 @@ app.post('/send-message', [
     // console.log(tempMessage);
     message = tempMessage
   } else {
-    let tempMessage = `*=== HANA MDW MONITORING${caption0} ==*\n \n\n*Decription*: ${caption0} in 5 minutes has ${caption3}% timeout rate transactions\n \n\n Error   = ${caption1}\n Success = ${caption2} \n Total   = ${caption4} \n\n *Summary*: ${caption0} timeout treshold above 5%\n\n *==== Now It's OKayy!‼️ ===*
+    let tempMessage = `=== HANA MDW MONITORING${caption0} ==\n \n\n*Decription*: ${caption0} in 5 minutes has ${caption3}% timeout rate transactions\n \n\n Error   = ${caption1}\n Success = ${caption2} \n Total   = ${caption4} \n\n *Summary*: ${caption0} timeout treshold above 5%\n\n *==== Now It's OKayy!‼️ ===*
     \nSource      : ${link} \n\nSilence     : ${link1} \n\nDashboard   : ${link2} \n\nPanel       : ${link3}`; 
     // console.log(tempMessage)
     message = tempMessage
   }
   console.log(number,'<1')
   console.log(message,'<2')
-  console.log(caption5)
 
   // const number2 = phoneNumberFormatter(req.body.number);
   // const message2 = req.body.message;
@@ -351,7 +350,7 @@ app.post('/send-media', async (req, res) => {
   const link3    = str.split('Panel:')[1].split('\n')[0];
   //const caption =  `=== HANA MDW MONITORING${caption3} ==\nError = ${caption0}\nSuccess = ${caption1}\nTotal = ${caption2} \n==== *Please Check Monitoring!‼️* === }`
     let caption;
-  if (caption5 == ' **Firing**') {
+  if (caption5 == '**Firing**') {
     let tempMessage = `*=== HANA MDW MONITORING${caption0} ==*\n \n\n*Decription*: ${caption0} in 5 minutes has ${caption1}% timeout rate transactions\n \n\n Error   = ${caption2}\n Success = ${caption3} \n Total   = ${caption4} \n\n *Summary*: ${caption0} timeout treshold above 5%\n\n  *====  Please Check Monitoring!‼️  ===*  
     \nSource      : ${link}  \n\nDashboard   : ${link2} \n\nPanel       : ${link3}`;
     // console.log(tempMessage);
@@ -371,7 +370,7 @@ app.post('/send-media', async (req, res) => {
   console.log(number,'<1')
   console.log(fileUrl,'<2')
   console.log(orgId,`<3`)
-  
+  console.log(caption5,`<4`)
   let token;
   if(orgId =='5'){
     token = 'eyJrIjoiM2V3VVJlMlFCZnNMRG9kQUtYeGR6THhKUGd0Zm5vWDciLCJuIjoiY2FwdHVyZSIsImlkIjo1fQ=='
