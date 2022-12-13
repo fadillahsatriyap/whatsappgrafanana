@@ -561,19 +561,19 @@ app.post('/send-group-message', [
   const link3    = msgGroup.split('Panel:')[1].split('\n')[0];
   // console.log('====>',req,'<======');
   let caption;
-  if (caption5 == ' **Firing**') {
-    let tempMessage = `*=== HANA MDW MONITORING${caption0} ==*\n \n\n*Decription*: ${caption0} in 5 minutes has ${caption1}% timeout rate transactions\n \n\n Error   = ${caption2}\n Success = ${caption3} \n Total   = ${caption4} \n\n *Summary*: ${caption0} timeout treshold above 5%\n\n  *====  Please Check Monitoring!‼️  ===*  
+  if (caption5 == '**Firing**') {
+    let tempMessage = `*==HANA MDW MONITORING${caption0}==*\n \n\n*Decription*: ${caption0} in 5 minutes has ${caption1}% timeout rate transactions\n \n\n Error   = ${caption2}\n Success = ${caption3} \n Total   = ${caption4} \n\n *Summary*: ${caption0} timeout treshold above 5%\n\n  *====  Please Check Monitoring!‼️  ===*  
     \nSource      : ${link}  \n\nDashboard   : ${link2} \n\nPanel       : ${link3}`;
     // console.log(tempMessage);
     caption = tempMessage
   } else {
-    let tempMessage = `=== HANA MDW MONITORING${caption0} ==\n \n\n*Decription*: ${caption0} in 5 minutes has ${caption1}% timeout rate transactions\n \n\n Error   = ${caption2}\n Success = ${caption3} \n Total   = ${caption4} \n\n *Summary*: ${caption0} timeout treshold above 5%\n\n *==== Now It's OKayy!‼️ ===*
+    let tempMessage = `*==HANA MDW MONITORING${caption0}==*\n \n\n*Decription*: ${caption0} in 5 minutes has ${caption1}% timeout rate transactions\n \n\n Error   = ${caption2}\n Success = ${caption3} \n Total   = ${caption4} \n\n *Summary*: ${caption0} timeout treshold above 5%\n\n *==== Now It's OKayy!‼️ ===*
     \nSource      : ${link}  \n\nDashboard   : ${link2} \n\nPanel       : ${link3}`; 
     // console.log(tempMessage)
     caption = tempMessage
   }
   
-  console.log(caption,`<21`)
+  //console.log(caption,`<21`)
   
   const fileUrl = `http://dev-middleware-api.hanabank.co.id/mdw-monitoring/render/d-solo/${panel}/mdw?orgId=${orgId}&refresh=1m&from=${fileUrl1}&to=${fileUrl2}&panelId=${panel1}&width=1000&height=500&tz=Asia%2FBangkok`
    
