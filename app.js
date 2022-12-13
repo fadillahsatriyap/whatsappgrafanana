@@ -277,6 +277,7 @@ app.post('/send-message', [
   }
   console.log(number,'<1')
   console.log(message,'<2')
+  console.log(caption5)
 
   // const number2 = phoneNumberFormatter(req.body.number);
   // const message2 = req.body.message;
