@@ -356,7 +356,7 @@ app.post('/send-media', async (req, res) => {
     // console.log(tempMessage);
     caption = tempMessage
   } else {
-    let tempMessage = `=== HANA MDW MONITORING${caption0} ==\n \n\n*Decription*: ${caption0} in 5 minutes has ${caption1}% timeout rate transactions\n \n\n Error   = ${caption2}\n Success = ${caption3} \n Total   = ${caption4} \n\n *Summary*: ${caption0} timeout treshold above 5%\n\n *==== Now It's OKayy!‼️ ===*
+    let tempMessage = `*=== HANA MDW MONITORING${caption0} ==*\n \n\n*Decription*: ${caption0} in 5 minutes has ${caption1}% timeout rate transactions\n \n\n Error   = ${caption2}\n Success = ${caption3} \n Total   = ${caption4} \n\n *Summary*: ${caption0} timeout treshold above 5%\n\n *==== Now It's OKayy!‼️ ===*
     \nSource      : ${link}  \n\nDashboard   : ${link2} \n\nPanel       : ${link3}`; 
     // console.log(tempMessage)
     caption = tempMessage
@@ -533,24 +533,63 @@ app.post('/send-group-message', [
   //   });
   // }
    
-  const msgGroup =  `Firing
-    Value: [ metric='foo' labels={instance=bar} value=10 ]
-    Labels:
-    - alertname = TestAlert
-    - instance = Grafana
-    Annotations:
-    - description = name = oi caption = absasaxdas file = https://cdn.pixabay.com/photo/2020/06/21/18/23/pixabay-5326193_960_720.png
-    - summary = Notification test
-    Silence: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/alerting/silence/new?alertmanager=grafana&matcher=alertname%3DTestAlert&matcher=instance%3DGrafana
-    '`;
+  const msgGroup =  req.body.message;
   //const words = str.split(' ');
-  const groupName =   msgGroup.split('=')[8].split(' ')[1];
-  const caption = msgGroup.split('=')[9].split('file')[0];
-  const fileUrl = msgGroup.split('=')[10].split('\n')[0];
-  console.log(groupName,'<1')
-  console.log(caption,'<2')
-  console.log(fileUrl,'<3')
+  // const groupName =   msgGroup.split('=')[8].split(' ')[1];
+  // const caption = msgGroup.split('=')[9].split('file')[0];
+  // const fileUrl = msgGroup.split('=')[10].split('\n')[0];
+  // console.log(groupName,'<1')
+  // console.log(caption,'<2')
+  // console.log(fileUrl,'<3')
+  //const words = str.split(' ');
+
+  const groupName = msgGroup.split('= ')[6].split('\n')[0];
+  const fileUrl1= msgGroup.split('time_start = ')[1].split('\n')[0];
+  const fileUrl2= msgGroup.split('time_end = ')[1].split('\n')[0];
+  const panel = msgGroup.split('/d/')[1].split('\n')[0];
+  const panel1 = msgGroup.split('viewPanel=')[1].split('\n')[0];
+  const orgId = msgGroup.split(`Org = `)[1].split(`\n`)[0];
+  //const fileUrl = str.split('file =')[1].split(`\n`)[0];
+  const caption0 = msgGroup.split('=')[25].split('\n')[0];
+  const caption1 = msgGroup.split('=')[28].split('%')[0];
+  const caption2 = msgGroup.split('=')[29].split('\n')[0];
+  const caption3 = msgGroup.split('=')[30].split('\n')[0];
+  const caption4 = msgGroup.split('=')[31].split('\n')[0];
+  const caption5 = msgGroup.split(`\n`)[0];
+  const link     = msgGroup.split('Source:')[1].split('\n')[0];
+  const link2    = msgGroup.split('Dashboard:')[1].split('\n')[0];
+  const link3    = msgGroup.split('Panel:')[1].split('\n')[0];
   // console.log('====>',req,'<======');
+  let caption;
+  if (caption5 == ' **Firing**') {
+    let tempMessage = `*=== HANA MDW MONITORING${caption0} ==*\n \n\n*Decription*: ${caption0} in 5 minutes has ${caption1}% timeout rate transactions\n \n\n Error   = ${caption2}\n Success = ${caption3} \n Total   = ${caption4} \n\n *Summary*: ${caption0} timeout treshold above 5%\n\n  *====  Please Check Monitoring!‼️  ===*  
+    \nSource      : ${link}  \n\nDashboard   : ${link2} \n\nPanel       : ${link3}`;
+    // console.log(tempMessage);
+    caption = tempMessage
+  } else {
+    let tempMessage = `=== HANA MDW MONITORING${caption0} ==\n \n\n*Decription*: ${caption0} in 5 minutes has ${caption1}% timeout rate transactions\n \n\n Error   = ${caption2}\n Success = ${caption3} \n Total   = ${caption4} \n\n *Summary*: ${caption0} timeout treshold above 5%\n\n *==== Now It's OKayy!‼️ ===*
+    \nSource      : ${link}  \n\nDashboard   : ${link2} \n\nPanel       : ${link3}`; 
+    // console.log(tempMessage)
+    caption = tempMessage
+  }
+  
+  console.log(caption,`<21`)
+  
+  const fileUrl = `http://dev-middleware-api.hanabank.co.id/mdw-monitoring/render/d-solo/${panel}/mdw?orgId=${orgId}&refresh=1m&from=${fileUrl1}&to=${fileUrl2}&panelId=${panel1}&width=1000&height=500&tz=Asia%2FBangkok`
+   
+
+  let token;
+  if(orgId =='5'){
+    token = 'eyJrIjoiM2V3VVJlMlFCZnNMRG9kQUtYeGR6THhKUGd0Zm5vWDciLCJuIjoiY2FwdHVyZSIsImlkIjo1fQ=='
+  }else if (orgId=='1'){
+    token = `glsa_A3LzmJIOMe92vRLuktAwnoqef0RsTtwy_842a36e3`
+  }else(
+    console.log(`Orgid tidak ditemukan`)
+    )
+
+  console.log(token,`<3`)
+  console.log(groupName,`<3`)
+  
 
   let chatId = req.body.id;
   // const groupName = req.body.name;
@@ -570,7 +609,8 @@ app.post('/send-group-message', [
 
   let mimetype;
   const attachment = await axios.get(fileUrl, {
-    responseType: 'arraybuffer'
+    responseType: 'arraybuffer',
+    headers: { Authorization: `Bearer ${token}` }
   }).then(response => {
     mimetype = response.headers['content-type'];
     return response.data.toString('base64');
