@@ -177,32 +177,6 @@ const checkRegisteredNumber = async function(number) {
 
 
 
-// app.get('/send',(req,res)=>
-// {
-//   let tujuan = req.query.tujuan;
-//   let pesan  = req.query.pesan;
-
-//   tujuan= tujuan.substring(1);
-//   tujuan= '62${tujuan}@c.us';
-//   console.log(tujuan);
-//   client.sendMessage (tujuan, pesan);
-//   res.json({status: false});
-//   console.log(pesan);
-
-  
-// });
-
-
-
-// Create the endpoint for your webhook
-
-// app.post("/webhook", (req, res) => {
-//   let body = req.body;
-
-//   console.log(`\u{1F7EA} Received webhook:`);
-//   console.dir(body, { depth: null });
-// });
-
 // Send message
 app.post('/send-message', [
   body('number'),
@@ -356,7 +330,7 @@ app.post('/send-media', async (req, res) => {
     // console.log(tempMessage);
     caption = tempMessage
   } else {
-    let tempMessage = `*=== HANA MDW MONITORING${caption0} ==*\n \n\n*Decription*: ${caption0} in 5 minutes has ${caption1}% timeout rate transactions\n \n\n Error   = ${caption2}\n Success = ${caption3} \n Total   = ${caption4} \n\n *Summary*: ${caption0} timeout treshold above 5%\n\n *==== Now It's OKayy!‼️ ===*
+    let tempMessage = `*=== HANA MDW MONITORING${caption0} ==*\n \n\n*Decription*: ${caption0} in 5 minutes has ${caption1}% timeout rate transactions\n \n\n Error   = ${caption2}\n Success = ${caption3} \n Total   = ${caption4} \n\n *Summary*: ${caption0} timeout treshold above 5%\n\n   *==== Now It's OKayy ✅===*
     \nSource      : ${link}  \n\nDashboard   : ${link2} \n\nPanel       : ${link3}`; 
     // console.log(tempMessage)
     caption = tempMessage
@@ -426,90 +400,6 @@ const findGroupByName = async function(name) {
   return group;
 }
 
-// app.post('/send-group-message', [
-//   body('id').custom((value, { req }) => {
-//   return true;
-//   }),
-//   body('message').notEmpty(),
-// ]
-// , async (req, res) => {
-//   const errors = validationResult(req).formatWith(({
-//     msg
-//   }) => {
-//     return msg;
-//   });
-
-//   if (!errors.isEmpty()) {
-//     return res.status(422).json({
-//       status: false,
-//       message: errors.mapped()
-//     });
-//   }
-   
-//   const msgGroup =  `Firing
-//     Value: [ metric='foo' labels={instance=bar} value=10 ]
-//     Labels:
-//     - alertname = TestAlert
-//     - instance = Grafana
-//     Annotations:
-//     - description = name = oi caption = absasaxdas file = https://cdn.pixabay.com/photo/2020/06/21/18/23/pixabay-5326193_960_720.png
-//     - summary = Notification test
-//     Silence: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/alerting/silence/new?alertmanager=grafana&matcher=alertname%3DTestAlert&matcher=instance%3DGrafana
-//     '`;
-//   //const words = str.split(' ');
-//   const groupName =   msgGroup.split('=')[8].split(' ')[1];
-//   const caption = msgGroup.split('=')[9].split('file')[0];
-//   const fileUrl = msgGroup.split('=')[10].split('\n')[0];
-//   console.log(groupName,'<1')
-//   console.log(caption,'<2')
-//   console.log(fileUrl,'<3')
-//   // console.log('====>',req,'<======');
-
-//   let chatId = req.body.id;
-//   // const groupName = req.body.name;
-//   // const message = req.body.message;
-
-//   // Find the group by name
-//   if (!chatId) {
-//     const group = await findGroupByName(groupName);
-//     if (!group) {
-//       return res.status(422).json({
-//         status: false,
-//         message: 'No group found with name: ' + groupName
-//       });
-//     }
-//     chatId = group.id._serialized;
-//   }
-
-//   let mimetype;
-//   const attachment = await axios.get(fileUrl, {
-//     responseType: 'arraybuffer'
-//   }).then(response => {
-//     mimetype = response.headers['content-type'];
-//     return response.data.toString('base64');
-//   });
-
-//   const media = new MessageMedia(mimetype, attachment, 'Media');
-  
-
-//   client.sendMessage(chatId, media,  {
-//     caption: caption
-//   } ).then(response => {
-//     res.status(200).json({
-//       status: true,
-//       response: response
-//     });
-//     console.log(caption,'<4')
-//   }).catch(err => {
-//     res.status(500).json({
-//       status: false,
-//       response: err
-//     });
-//   });
-// });
-
-
-// Clearing message on spesific chat
 
 
 
@@ -543,7 +433,7 @@ app.post('/send-group-message', [
   // console.log(fileUrl,'<3')
   //const words = str.split(' ');
 
-  const groupName = msgGroup.split('= ')[6].split('\n')[0];
+  const groupName = msgGroup.split('Group = ')[1].split('\n')[0];
   const fileUrl1= msgGroup.split('time_start = ')[1].split('\n')[0];
   const fileUrl2= msgGroup.split('time_end = ')[1].split('\n')[0];
   const panel = msgGroup.split('/d/')[1].split('\n')[0];
@@ -551,33 +441,32 @@ app.post('/send-group-message', [
   const orgId = msgGroup.split(`Org = `)[1].split(`\n`)[0];
   //const fileUrl = str.split('file =')[1].split(`\n`)[0];
   const caption0 = msgGroup.split('=')[25].split('\n')[0];
-  const caption1 = msgGroup.split('=')[28].split('%')[0];
-  const caption2 = msgGroup.split('=')[29].split('\n')[0];
-  const caption3 = msgGroup.split('=')[30].split('\n')[0];
-  const caption4 = msgGroup.split('=')[31].split('\n')[0];
+  const caption1 = msgGroup.split('description =')[1].split('- summary')[0];
+  const caption2 = msgGroup.split('summary =')[1].split('\n')[0];
   const caption5 = msgGroup.split(`\n`)[0];
   const link     = msgGroup.split('Source:')[1].split('\n')[0];
+  const link1    = msgGroup.split('Silence:')[1].split('\n')[0];
   const link2    = msgGroup.split('Dashboard:')[1].split('\n')[0];
   const link3    = msgGroup.split('Panel:')[1].split('\n')[0];
   // console.log('====>',req,'<======');
   let caption;
   if (caption5 == '**Firing**') {
-    let tempMessage = `*==HANA MDW MONITORING${caption0}==*\n \n\n*Decription*: ${caption0} in 5 minutes has ${caption1}% timeout rate transactions\n \n\n Error   = ${caption2}\n Success = ${caption3} \n Total   = ${caption4} \n\n *Summary*: ${caption0} timeout treshold above 5%\n\n  *====  Please Check Monitoring!‼️  ===*  
-    \nSource      : ${link}  \n\nDashboard   : ${link2} \n\nPanel       : ${link3}`;
+    let tempMessage = `     *==HANA MDW MONITORING${caption0}==*  \n \n\n*Decription*: ${caption1}  \n\n *Summary*: ${caption2} \n\n    *===  Please Check Monitoring!‼️  ===*  
+    \nSource      : ${link} \n\nSilence   : ${link1}  \n\nDashboard   : ${link2} \n\nPanel       : ${link3}`;
     // console.log(tempMessage);
     caption = tempMessage
   } else {
-    let tempMessage = `*==HANA MDW MONITORING${caption0}==*\n \n\n*Decription*: ${caption0} in 5 minutes has ${caption1}% timeout rate transactions\n \n\n Error   = ${caption2}\n Success = ${caption3} \n Total   = ${caption4} \n\n *Summary*: ${caption0} timeout treshold above 5%\n\n *==== Now It's OKayy!‼️ ===*
-    \nSource      : ${link}  \n\nDashboard   : ${link2} \n\nPanel       : ${link3}`; 
+    let tempMessage = `     *==HANA MDW MONITORING${caption0}==*  \n \n\n*Decription*: ${caption1}  \n\n *Summary*: ${caption2} \n\n         *=== Now It's OKayy!‼️ ✅===*
+    \nSource      : ${link} \n\nSilence   : ${link1}  \n\nDashboard   : ${link2} \n\nPanel       : ${link3}`; 
     // console.log(tempMessage)
     caption = tempMessage
   }
-  
+  console.log(caption5,`<<4`)
   //console.log(caption,`<21`)
   
   const fileUrl = `http://dev-middleware-api.hanabank.co.id/mdw-monitoring/render/d-solo/${panel}/mdw?orgId=${orgId}&refresh=1m&from=${fileUrl1}&to=${fileUrl2}&panelId=${panel1}&width=1000&height=500&tz=Asia%2FBangkok`
    
-
+  console.log(fileUrl,`<<<<=5`)
   let token;
   if(orgId =='5'){
     token = 'eyJrIjoiM2V3VVJlMlFCZnNMRG9kQUtYeGR6THhKUGd0Zm5vWDciLCJuIjoiY2FwdHVyZSIsImlkIjo1fQ=='
@@ -612,6 +501,7 @@ app.post('/send-group-message', [
     responseType: 'arraybuffer',
     headers: { Authorization: `Bearer ${token}` }
   }).then(response => {
+    console.log(response.data,`<<<===>>>4`)
     mimetype = response.headers['content-type'];
     return response.data.toString('base64');
   });
@@ -634,10 +524,6 @@ app.post('/send-group-message', [
     });
   });
 });
-
-
-
-
 
 
 
