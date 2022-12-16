@@ -440,7 +440,7 @@ app.post('/send-group-message', [
   const panel1 = msgGroup.split('viewPanel=')[1].split('\n')[0];
   const orgId = msgGroup.split(`Org = `)[1].split(`\n`)[0];
   //const fileUrl = str.split('file =')[1].split(`\n`)[0];
-  const caption0 = msgGroup.split('=')[25].split('\n')[0];
+  const caption0 = msgGroup.split('alertname =')[1].split('\n')[0];
   const caption1 = msgGroup.split('description =')[1].split('- summary')[0];
   const caption2 = msgGroup.split('summary =')[1].split('\n')[0];
   const caption5 = msgGroup.split(`\n`)[0];

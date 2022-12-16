@@ -11,11 +11,11 @@ Annotations:
  - Org = 5
  - TIme = time_start = 1671093925003
 time_end = 1671094825004
- - description = Transaction Cash in 5 minutes has 0% timeout rate transactions
-Timeout: 0
-Success: 3
-Failed: 0
-Total: 3
+ - description = Transaction Cash in 5 minutes has <no value>% timeout rate transactions
+Timeout: <no value>
+Success: <no value>
+Failed: <no value>
+Total:  <no value>
  - summary = Cash timeout threshold above 5%
 Source: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/alerting/grafana/Fp0dY55Vz/view
 Silence: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/alerting/silence/new?alertmanager=grafana&matcher=alertname%3DDEV-CASH&matcher=grafana_folder%3DDEVGIBI
@@ -33,8 +33,8 @@ Panel: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/d/iGW32xv4z?viewP
   const panel1 = msgGroup.split('viewPanel=')[1].split('\n')[0];
   const orgId = msgGroup.split(`Org = `)[1].split(`\n`)[0];
   //const fileUrl = str.split('file =')[1].split(`\n`)[0];
-  const caption0 = msgGroup.split('=')[25].split('\n')[0];
-  const caption1 = msgGroup.split('description =')[1].split('- summary')[0];
+  const caption0 = msgGroup.split('alertname =')[1].split('\n')[0];
+  const caption1 = msgGroup.split('description = ')[1].split('- summary')[0];
   const caption2 = msgGroup.split('summary =')[1].split('\n')[0];
   const caption5 = msgGroup.split(`\n`)[0];
   const link     = msgGroup.split('Source:')[1].split('\n')[0];
