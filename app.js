@@ -375,7 +375,6 @@ app.post('/send-media', async (req, res) => {
   });
 
   const media = new MessageMedia(mimetype, attachment, 'Media');
-
   client.sendMessage(number, media, {
     caption: caption
   }).then(response => {
@@ -403,6 +402,7 @@ const findGroupByName = async function(name) {
 
 
 
+
 app.post('/send-group-message', [
   body('id').custom((value, { req }) => {
   return true;
@@ -422,8 +422,12 @@ app.post('/send-group-message', [
   //     message: errors.mapped()
   //   });
   // }
-   
-  const msgGroup =  req.body.message;
+  
+  
+let fileUrl2, fileUrl1, orgId, caption1
+try {
+const msgGroup = req.body.message;
+console.log(msgGroup,`====DARI GRAFANA======`)
   //const words = str.split(' ');
   // const groupName =   msgGroup.split('=')[8].split(' ')[1];
   // const caption = msgGroup.split('=')[9].split('file')[0];
@@ -434,33 +438,85 @@ app.post('/send-group-message', [
   //const words = str.split(' ');
 
   const groupName = msgGroup.split('Group = ')[1].split('\n')[0];
-  const fileUrl1= msgGroup.split('time_start = ')[1].split('\n')[0];
-  const fileUrl2= msgGroup.split('time_end = ')[1].split('\n')[0];
-  const panel = msgGroup.split('/d/')[1].split('\n')[0];
-  const panel1 = msgGroup.split('viewPanel=')[1].split('\n')[0];
-  const orgId = msgGroup.split(`Org = `)[1].split(`\n`)[0];
-  //const fileUrl = str.split('file =')[1].split(`\n`)[0];
-  const caption0 = msgGroup.split('alertname =')[1].split('\n')[0];
-  const caption1 = msgGroup.split('description =')[1].split('- summary')[0];
-  const caption2 = msgGroup.split('summary =')[1].split('\n')[0];
-  const caption5 = msgGroup.split(`\n`)[0];
-  const link     = msgGroup.split('Source:')[1].split('\n')[0];
-  const link1    = msgGroup.split('Silence:')[1].split('\n')[0];
-  const link2    = msgGroup.split('Dashboard:')[1].split('\n')[0];
-  const link3    = msgGroup.split('Panel:')[1].split('\n')[0];
-  // console.log('====>',req,'<======');
-  let caption;
-  if (caption5 == '**Firing**') {
-    let tempMessage = `     *==HANA MDW MONITORING${caption0}==*  \n \n\n*Decription*: ${caption1}  \n\n *Summary*: ${caption2} \n\n    *===  Please Check Monitoring!‼️  ===*  
-    \nSource      : ${link} \n\nSilence   : ${link1}  \n\nDashboard   : ${link2} \n\nPanel       : ${link3}`;
-    // console.log(tempMessage);
-    caption = tempMessage
-  } else {
-    let tempMessage = `     *==HANA MDW MONITORING${caption0}==*  \n \n\n*Decription*: ${caption1}  \n\n *Summary*: ${caption2} \n\n         *=== Now It's OKayy!‼️ ✅===*
-    \nSource      : ${link} \n\nSilence   : ${link1}  \n\nDashboard   : ${link2} \n\nPanel       : ${link3}`; 
-    // console.log(tempMessage)
-    caption = tempMessage
+  let validImage = true
+  if(msgGroup.split('time_end = ')[1] && msgGroup.split('time_start = ')[1]&& msgGroup.split(`Org = `)[1]){
+    fileUrl2= msgGroup.split('time_end = ')[1].split('\n')[0]
+    fileUrl1= msgGroup.split('time_start = ')[1].split('\n')[0]
+    orgId = msgGroup.split(`Org = `)[1].split(`\n`)[0]
+    ;
   }
+  else{
+   validImage = false
+  }
+  
+  console.log(validImage,`=====>><<`)
+   
+  
+  
+  
+ 
+  
+//   //const fileUrl = str.split('file =')[1].split(`\n`)[0];
+//   const panel = msgGroup.split('/d/')[1].split('\n')[0]
+//   const panel1 = msgGroup.split('viewPanel=')[1].split('\n')[0]
+//   const caption0 = msgGroup.split('=')[25].split('\n')[0];
+//   const caption5 = msgGroup.split(`\n`)[0];
+//   const link     = msgGroup.split('Source:')[1].split('\n')[0];
+//   const link1    = msgGroup.split('Silence:')[1].split('\n')[0];
+//   const link2    = msgGroup.split('Dashboard:')[1].split('\n')[0];
+//   const link3    = msgGroup.split('Panel:')[1].split('\n')[0];
+//   // console.log('====>',req,'<======');
+  
+//   if(msgGroup.split('description =')[1]){
+//     caption1 = msgGroup.split('description =')[1].split('\n\n')[0]
+//  }else{
+//    caption1 = "No Description"
+//  }
+
+//  if(msgGroup.split('summary =')[1]){
+//    caption2 = msgGroup.split('summary =')[1].split('\n')[0]
+// }else{
+//  caption2 = "No Summary"
+// }
+
+const panel = msgGroup.split('/d/')[1].split('\n')[0];
+console.log(panel,`======fileurl2`)
+const panel1 = msgGroup.split('viewPanel=')[1].split('\n')[0];
+//const fileUrl = str.split('file =')[1].split(`\n`)[0];
+const caption0 = msgGroup.split('=')[25].split('\n')[0];
+const caption2 = msgGroup.split('Summary =')[1].split('\n')[0]
+const caption5 = msgGroup.split(`\n`)[0];
+const link     = msgGroup.split('Source:')[1].split('\n')[0];
+const link1    = msgGroup.split('Silence:')[1].split('\n')[0];
+const link2    = msgGroup.split('Dashboard:')[1].split('\n')[0];
+const link3    = msgGroup.split('Panel:')[1].split('\n')[0];
+// console.log('====>',req,'<======');
+if(msgGroup.split('Description =')[1]){
+  caption1 = msgGroup.split('Description =')[1].split('\n\n')[0]
+}else{
+ caption1 = "No Description"
+}
+
+// if(msgGroup.split('Summary =')[1]){
+//  caption2 = msgGroup.split('Summary =')[1].split('\n')[0]
+// }else{
+// caption2 = "No Summary"
+// }
+
+
+
+let caption;
+if (caption5 == '**Firing**') {
+  let tempMessage = `     *==HANA MDW MONITORING${caption0}==*  \n \n\n*Decription*: ${caption1}  \n\n *Summary*: ${caption2} \n\n    *===  Please Check Monitoring!‼️  ===*  
+  \nSource      : ${link} \n\nSilence   : ${link1}  \n\nDashboard   : ${link2} \n\nPanel       : ${link3}`;
+  // console.log(tempMessage);
+  caption = tempMessage
+} else {
+  let tempMessage = `     *==HANA MDW MONITORING${caption0}==*  \n \n\n*Decription*: ${caption1}  \n\n *Summary*: ${caption2} \n\n         *=== Now It's OKayy!‼️ ✅===*
+  \nSource      : ${link} \n\nSilence   : ${link1}  \n\nDashboard   : ${link2} \n\nPanel       : ${link3}`; 
+  // console.log(tempMessage)
+  caption = tempMessage
+}
   console.log(caption5,`<<4`)
   //console.log(caption,`<21`)
   
@@ -476,9 +532,11 @@ app.post('/send-group-message', [
     console.log(`Orgid tidak ditemukan`)
     )
 
-  console.log(token,`<3`)
-  console.log(groupName,`<3`)
-  
+  // console.log(token,`<3`)
+  // console.log(groupName,`<4`)
+  // console.log(caption,`<4.5`)
+  // console.log(panel,`panelll`)
+  // console.log(panel1,`panelll---1`)
 
   let chatId = req.body.id;
   // const groupName = req.body.name;
@@ -496,17 +554,24 @@ app.post('/send-group-message', [
     chatId = group.id._serialized;
   }
 
-  let mimetype;
-  const attachment = await axios.get(fileUrl, {
-    responseType: 'arraybuffer',
-    headers: { Authorization: `Bearer ${token}` }
-  }).then(response => {
-    console.log(response.data,`<<<===>>>4`)
-    mimetype = response.headers['content-type'];
-    return response.data.toString('base64');
-  });
-
-  const media = new MessageMedia(mimetype, attachment, 'Media');
+  let media
+  if(validImage){
+    attachment = await axios.get(fileUrl, {
+      responseType: 'arraybuffer',
+      headers: { Authorization: `Bearer ${token}` }
+    }).then(response => {
+      console.log(response.data,`<<<===>>>4`)
+      mimetype = response.headers['content-type'];
+      return response.data.toString('base64');
+    }).catch(error=>{
+      console.log(error)
+    });
+     media = new MessageMedia(mimetype, attachment, 'Media');
+  }else{
+    media = MessageMedia.fromFilePath('./warning.png');
+ 
+  }
+ 
   
 
   client.sendMessage(chatId, media,  {
@@ -523,6 +588,9 @@ app.post('/send-group-message', [
       response: err
     });
   });
+} catch (error) {
+  console.log(error,`<+++++`)
+}
 });
 
 
