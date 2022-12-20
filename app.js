@@ -9,7 +9,10 @@ const fs = require('fs');
 const { phoneNumberFormatter } = require('./helpers/formatter');
 const fileUpload = require('express-fileupload');
 const axios = require('axios');
-const mime = require('mime-types');
+//const mime = require('mime-types');
+//require('log-timestamp');
+
+
 
 
 
@@ -149,7 +152,12 @@ client.initialize();
     client.on('ready', () => {
 //     socket.emit('ready', 'Whatsapp is ready!');
 //     socket.emit('message', 'Whatsapp is ready!');
-      console.log('Client is ready!');
+    const nDate = new Date().toLocaleString('en-US', {
+    timeZone: 'Asia/Jakarta'
+    });
+   
+      console.log(nDate,'Client is ready!');
+     
   });
 
 //   client.on('authenticated', () => {
@@ -422,12 +430,16 @@ app.post('/send-group-message', [
   //     message: errors.mapped()
   //   });
   // }
+  const nDate = new Date().toLocaleString('en-US', {
+    timeZone: 'Asia/Jakarta'
+    });
+    
   
   
 let fileUrl2, fileUrl1, orgId, caption1
 try {
 const msgGroup = req.body.message;
-console.log(msgGroup,`====DARI GRAFANA======`)
+console.log(nDate,`============>`,msgGroup,`<=========DARI GRAFANA`)
   //const words = str.split(' ');
   // const groupName =   msgGroup.split('=')[8].split(' ')[1];
   // const caption = msgGroup.split('=')[9].split('file')[0];
@@ -438,6 +450,7 @@ console.log(msgGroup,`====DARI GRAFANA======`)
   //const words = str.split(' ');
 
   const groupName = msgGroup.split('Group = ')[1].split('\n')[0];
+  console.log(groupName,`=====group`)
   let validImage = true
   if(msgGroup.split('time_end = ')[1] && msgGroup.split('time_start = ')[1]&& msgGroup.split(`Org = `)[1]){
     fileUrl2= msgGroup.split('time_end = ')[1].split('\n')[0]
@@ -480,19 +493,19 @@ console.log(msgGroup,`====DARI GRAFANA======`)
 // }
 
 const panel = msgGroup.split('/d/')[1].split('\n')[0];
-console.log(panel,`======fileurl2`)
+//console.log(panel,`======fileurl2`)
 const panel1 = msgGroup.split('viewPanel=')[1].split('\n')[0];
 //const fileUrl = str.split('file =')[1].split(`\n`)[0];
 const caption0 = msgGroup.split('=')[25].split('\n')[0];
-const caption2 = msgGroup.split('Summary =')[1].split('\n')[0]
+const caption2 = msgGroup.split('summary =')[1].split('\n')[0]
 const caption5 = msgGroup.split(`\n`)[0];
 const link     = msgGroup.split('Source:')[1].split('\n')[0];
 const link1    = msgGroup.split('Silence:')[1].split('\n')[0];
 const link2    = msgGroup.split('Dashboard:')[1].split('\n')[0];
 const link3    = msgGroup.split('Panel:')[1].split('\n')[0];
 // console.log('====>',req,'<======');
-if(msgGroup.split('Description =')[1]){
-  caption1 = msgGroup.split('Description =')[1].split('\n\n')[0]
+if(msgGroup.split('description =')[1]){
+  caption1 = msgGroup.split('description =')[1].split('- summary')[0]
 }else{
  caption1 = "No Description"
 }
@@ -507,22 +520,25 @@ if(msgGroup.split('Description =')[1]){
 
 let caption;
 if (caption5 == '**Firing**') {
-  let tempMessage = `     *==HANA MDW MONITORING${caption0}==*  \n \n\n*Decription*: ${caption1}  \n\n *Summary*: ${caption2} \n\n    *===  Please Check Monitoring!‼️  ===*  
+  let tempMessage = `     *==HANA MDW MONITORING${caption0}==*  \n \n\n*Description*: ${caption1}  \n\n *Summary*: ${caption2} \n\n    *===  Please Check Monitoring!‼️  ===*  
   \nSource      : ${link} \n\nSilence   : ${link1}  \n\nDashboard   : ${link2} \n\nPanel       : ${link3}`;
   // console.log(tempMessage);
   caption = tempMessage
 } else {
-  let tempMessage = `     *==HANA MDW MONITORING${caption0}==*  \n \n\n*Decription*: ${caption1}  \n\n *Summary*: ${caption2} \n\n         *=== Now It's OKayy!‼️ ✅===*
+  let tempMessage = `     *==HANA MDW MONITORING${caption0}==*  \n \n\n*Description*: ${caption1}  \n\n *Summary*: ${caption2} \n\n         *=== Now It's OKayy   ✅===*
   \nSource      : ${link} \n\nSilence   : ${link1}  \n\nDashboard   : ${link2} \n\nPanel       : ${link3}`; 
   // console.log(tempMessage)
   caption = tempMessage
 }
-  console.log(caption5,`<<4`)
+
+
+  console.log(caption5,`<== buat check alert`)
+  console.log(`INI CAPTION ==========>`,caption,`<========`)
   //console.log(caption,`<21`)
-  
+  //console.log(caption,`====ini captionya ===`)
   const fileUrl = `http://dev-middleware-api.hanabank.co.id/mdw-monitoring/render/d-solo/${panel}/mdw?orgId=${orgId}&refresh=1m&from=${fileUrl1}&to=${fileUrl2}&panelId=${panel1}&width=1000&height=500&tz=Asia%2FBangkok`
    
-  console.log(fileUrl,`<<<<=5`)
+  console.log(fileUrl,`<<<<= check link`)
   let token;
   if(orgId =='5'){
     token = 'eyJrIjoiM2V3VVJlMlFCZnNMRG9kQUtYeGR6THhKUGd0Zm5vWDciLCJuIjoiY2FwdHVyZSIsImlkIjo1fQ=='
@@ -534,7 +550,7 @@ if (caption5 == '**Firing**') {
 
   // console.log(token,`<3`)
   // console.log(groupName,`<4`)
-  // console.log(caption,`<4.5`)
+
   // console.log(panel,`panelll`)
   // console.log(panel1,`panelll---1`)
 
@@ -581,7 +597,7 @@ if (caption5 == '**Firing**') {
       status: true,
       response: response
     });
-    console.log(caption,'<4')
+   // console.log(caption,'<4')
   }).catch(err => {
     res.status(500).json({
       status: false,
@@ -638,5 +654,8 @@ app.post('/clear-message', [
 });
 
 app.listen(port,()=> {
-  console.log('App running on *: ' + port);
+  const nDate = new Date().toLocaleString('en-US', {
+    timeZone: 'Asia/Jakarta'
+    });
+  console.log(nDate,'App running on *: ' + port);
 });
