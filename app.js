@@ -307,7 +307,26 @@ app.post('/send-message', [
 
 // Send media
 app.post('/send-media', async (req, res) => {
-  const str =  req.body.message;
+  const str = `**Firing**
+Value: [ var='total_success' labels={} value=162 ], [ var='is_true' labels={} value=1 ], [ var='total_failed' labels={} value=0 ], [ var='total_timeout' labels={} value=0 ], [ var='total_all' labels={} value=162 ], [ var='calc_threshold' labels={} value=0 ]
+Labels:
+ - alertname = INCOMING_BIFAST
+ - grafana_folder = IDC
+Annotations:
+ - Group = MDW - Monitoring
+ - Org = 1
+ - description = Incoming BIFAST in 5 minutes has 0% timeout rate transactions
+Timeout: 0
+Success: 162
+Failed: 0
+Total: 162
+ - summary = Transaction Incoming BIFAST timeout threshold above 20%
+Source: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/alerting/grafana/DZIStJH4z/view
+Silence: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/alerting/silence/new?alertmanager=grafana&matcher=alertname%3DINCOMING_BIFAST&matcher=grafana_folder%3DIDC
+Dashboard: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/d/1YPm51H4z
+Panel: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/d/1YPm51H4z?viewPanel=2
+	
+`;
   //const words = str.split(' ');
   console.log('====>',str,'<========');
   const number = phoneNumberFormatter(str.split('=')[26].split('\n')[0]);
@@ -494,7 +513,7 @@ const panel = msgGroup.split('/d/')[1].split('\n')[0];
 //console.log(panel,`======fileurl2`)
 const panel1 = msgGroup.split('viewPanel=')[1].split('\n')[0];
 //const fileUrl = str.split('file =')[1].split(`\n`)[0];
-const caption0 = msgGroup.split('=')[25].split('\n')[0];
+const caption0 = msgGroup.split('alertname =')[1].split('\n')[0];
 const caption2 = msgGroup.split('summary =')[1].split('\n')[0]
 const caption5 = msgGroup.split(`\n`)[0];
 const link     = msgGroup.split('Source:')[1].split('\n')[0];
