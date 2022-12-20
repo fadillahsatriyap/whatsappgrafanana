@@ -436,7 +436,7 @@ app.post('/send-group-message', [
     
   
   
-let fileUrl2, fileUrl1, orgId, caption1
+let  orgId, caption1
 try {
 const msgGroup = req.body.message;
 console.log(nDate,`============>`,msgGroup,`<=========DARI GRAFANA`)
@@ -452,9 +452,7 @@ console.log(nDate,`============>`,msgGroup,`<=========DARI GRAFANA`)
   const groupName = msgGroup.split('Group = ')[1].split('\n')[0];
   console.log(groupName,`=====group`)
   let validImage = true
-  if(msgGroup.split('time_end = ')[1] && msgGroup.split('time_start = ')[1]&& msgGroup.split(`Org = `)[1]){
-    fileUrl2= msgGroup.split('time_end = ')[1].split('\n')[0]
-    fileUrl1= msgGroup.split('time_start = ')[1].split('\n')[0]
+  if(msgGroup.split(`Org = `)[1]){
     orgId = msgGroup.split(`Org = `)[1].split(`\n`)[0]
     ;
   }
@@ -536,7 +534,7 @@ if (caption5 == '**Firing**') {
   console.log(`INI CAPTION ==========>`,caption,`<========`)
   //console.log(caption,`<21`)
   //console.log(caption,`====ini captionya ===`)
-  const fileUrl = `http://dev-middleware-api.hanabank.co.id/mdw-monitoring/render/d-solo/${panel}/mdw?orgId=${orgId}&refresh=1m&from=${fileUrl1}&to=${fileUrl2}&panelId=${panel1}&width=1000&height=500&tz=Asia%2FBangkok`
+  const fileUrl = `http://dev-middleware-api.hanabank.co.id/mdw-monitoring/render/d-solo/${panel}/mdw?orgId=${orgId}&refresh=1m&panelId=${panel1}&width=1000&height=500&tz=Asia%2FBangkok`
    
   console.log(fileUrl,`<<<<= check link`)
   let token;
