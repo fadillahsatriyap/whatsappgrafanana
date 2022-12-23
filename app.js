@@ -9,6 +9,7 @@ const fs = require('fs');
 const { phoneNumberFormatter } = require('./helpers/formatter');
 const fileUpload = require('express-fileupload');
 const axios = require('axios');
+const { group } = require('console');
 //const mime = require('mime-types');
 //require('log-timestamp');
 
@@ -307,25 +308,25 @@ app.post('/send-message', [
 
 // Send media
 app.post('/send-media', async (req, res) => {
-  const str = `**Firing**
-Value: [ var='total_success' labels={} value=162 ], [ var='is_true' labels={} value=1 ], [ var='total_failed' labels={} value=0 ], [ var='total_timeout' labels={} value=0 ], [ var='total_all' labels={} value=162 ], [ var='calc_threshold' labels={} value=0 ]
-Labels:
- - alertname = INCOMING_BIFAST
- - grafana_folder = IDC
-Annotations:
- - Group = MDW - Monitoring
- - Org = 1
- - description = Incoming BIFAST in 5 minutes has 0% timeout rate transactions
-Timeout: 0
-Success: 162
-Failed: 0
-Total: 162
- - summary = Transaction Incoming BIFAST timeout threshold above 20%
-Source: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/alerting/grafana/DZIStJH4z/view
-Silence: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/alerting/silence/new?alertmanager=grafana&matcher=alertname%3DINCOMING_BIFAST&matcher=grafana_folder%3DIDC
-Dashboard: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/d/1YPm51H4z
-Panel: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/d/1YPm51H4z?viewPanel=2
-	
+const str = `
+**Firing**
+
+  Value: [ var='totalsuccess' labels={} value=23 ], [ var='totalerror' labels={} value=11 ], [ var='total' labels={} value=34 ], [ var='treshold' labels={} value=32.35294117647059 ], [ var='istrue' labels={} value=1 ]
+  Labels:
+   - alertname = Gibi
+   - grafana_folder = DEVGIBI
+  Annotations:
+   - description = GIBI Transactions
+  number = 089686601193
+  
+  Gibi in 5 minutes has = 32.35294117647059% timeout rate transactions
+  Error = 11
+  Success = 23
+  Total = 34
+  Source: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/alerting/grafana/dNF02Cv4k/view
+  Silence: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/alerting/silence/new?alertmanager=grafana&matcher=alertname%3DGibi&matcher=grafana_folder%3DDEVGIBI
+  Dashboard: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/d/OeHCtCD4k
+  Panel: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/d/OeHCtCD4k?viewPanel=2
 `;
   //const words = str.split(' ');
   console.log('====>',str,'<========');
@@ -366,6 +367,7 @@ Panel: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/d/1YPm51H4z?viewP
   
   
   const fileUrl = `http://dev-middleware-api.hanabank.co.id/mdw-monitoring/render/d-solo/${panel}/mdw?orgId=${orgId}&refresh=1m&from=${fileUrl1}&to=${fileUrl2}&panelId=${panel1}&width=1000&height=500&tz=Asia%2FBangkok`
+  
   //const token = `eyJrIjoiM2V3VVJlMlFCZnNMRG9kQUtYeGR6THhKUGd0Zm5vWDciLCJuIjoiY2FwdHVyZSIsImlkIjo1fQ==`;
   
   console.log(number,'<1')
@@ -469,6 +471,8 @@ console.log(nDate,`============>`,msgGroup,`<=========DARI GRAFANA`)
   //const words = str.split(' ');
 
   const groupName = msgGroup.split('Group = ')[1].split('\n')[0];
+  const groupName2 = "Test";
+  console.log( "groupName2 : " + groupName2   );
   console.log(groupName,`=====group`)
   let validImage = true
   if(msgGroup.split(`Org = `)[1]){
@@ -485,30 +489,6 @@ console.log(nDate,`============>`,msgGroup,`<=========DARI GRAFANA`)
   
   
  
-  
-//   //const fileUrl = str.split('file =')[1].split(`\n`)[0];
-//   const panel = msgGroup.split('/d/')[1].split('\n')[0]
-//   const panel1 = msgGroup.split('viewPanel=')[1].split('\n')[0]
-//   const caption0 = msgGroup.split('=')[25].split('\n')[0];
-//   const caption5 = msgGroup.split(`\n`)[0];
-//   const link     = msgGroup.split('Source:')[1].split('\n')[0];
-//   const link1    = msgGroup.split('Silence:')[1].split('\n')[0];
-//   const link2    = msgGroup.split('Dashboard:')[1].split('\n')[0];
-//   const link3    = msgGroup.split('Panel:')[1].split('\n')[0];
-//   // console.log('====>',req,'<======');
-  
-//   if(msgGroup.split('description =')[1]){
-//     caption1 = msgGroup.split('description =')[1].split('\n\n')[0]
-//  }else{
-//    caption1 = "No Description"
-//  }
-
-//  if(msgGroup.split('summary =')[1]){
-//    caption2 = msgGroup.split('summary =')[1].split('\n')[0]
-// }else{
-//  caption2 = "No Summary"
-// }
-
 const panel = msgGroup.split('/d/')[1].split('\n')[0];
 //console.log(panel,`======fileurl2`)
 const panel1 = msgGroup.split('viewPanel=')[1].split('\n')[0];
@@ -551,8 +531,7 @@ if (caption5 == '**Firing**') {
 
   console.log(caption5,`<== buat check alert`)
   console.log(`INI CAPTION ==========>`,caption,`<========`)
-  //console.log(caption,`<21`)
-  //console.log(caption,`====ini captionya ===`)
+ 
   const fileUrl = `http://dev-middleware-api.hanabank.co.id/mdw-monitoring/render/d-solo/${panel}/mdw?orgId=${orgId}&refresh=1m&panelId=${panel1}&width=1000&height=500&tz=Asia%2FBangkok`
    
   console.log(fileUrl,`<<<<= check link`)
@@ -570,22 +549,31 @@ if (caption5 == '**Firing**') {
 
   // console.log(panel,`panelll`)
   // console.log(panel1,`panelll---1`)
-
+  console.log( "groupName2 : " + groupName2   )
+  console.log(groupName,`=====group`)
   let chatId = req.body.id;
   // const groupName = req.body.name;
   // const message = req.body.message;
-
+  let chatId2 = req.body.id;
   // Find the group by name
-  if (!chatId) {
-    const group = await findGroupByName(groupName);
-    if (!group) {
+ 
+  if (!chatId && !chatId2) {
+    const group = await findGroupByName(groupName)
+    const group2 = await findGroupByName(groupName2)
+    console.log(group,`groupp2`)
+    if (!group && !group2) {
       return res.status(422).json({
         status: false,
-        message: 'No group found with name: ' + groupName
+        message: 'No group found with name: ' + groupName,
+        message2: 'No group found with name: ' + groupName2
       });
     }
+
     chatId = group.id._serialized;
-  }
+    chatId2 = group2.id._serialized;
+
+  } 
+
 
   let media
   if(validImage){
@@ -605,22 +593,44 @@ if (caption5 == '**Firing**') {
  
   }
  
+
+    const array = [chatId, chatId2];
+    let groups = [];
+    let promises = [];
+    for (i = 0; i < array.length; i++) {
+      promises.push(
+        client.sendMessage(array[i], media,  {
+          caption: caption
+        } ).then(response => {
+          groups.push(response)
+          
+       
+         // console.log(chatId,`========>chatiddd`)
+        })
+      )
+    }
+    Promise.all(promises).then(() => 
+    {
+
+      res.status(200).json({
+        status: true,
+        response: groups
+      })
+      console.log(groups)
+    }).catch(err => {
+      res.status(500).json({
+        status: false,
+        response: err
+      });
+    });
+    
+  // for (let index = 0; index < allGroup.length; index++) {
+  //     const group = allGroup[index];
+  //     console.log(group,`<====group1`);
   
 
-  client.sendMessage(chatId, media,  {
-    caption: caption
-  } ).then(response => {
-    res.status(200).json({
-      status: true,
-      response: response
-    });
-   // console.log(caption,'<4')
-  }).catch(err => {
-    res.status(500).json({
-      status: false,
-      response: err
-    });
-  });
+      
+  //}  
 } catch (error) {
   console.log(error,`<+++++`)
 }

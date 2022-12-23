@@ -14,6 +14,10 @@
 // subtract5min.setTime(original.getTime() - 5*60*1000);
 // console.log("after : " + subtract5min);
 
+// const groupName = msgGroup.split('Group = ')[1].split('\n')[0];
+// const groupName2 = msgGroup.split('Group2 = ')[1].split('\n')[0]
+
+// console.log( "groupName : " + groupName   );
 
 
 //console.log( datetime.datetime.now() - datetime.timedelta(minutes=15))

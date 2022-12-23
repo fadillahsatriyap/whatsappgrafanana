@@ -1,27 +1,21 @@
-let fileUrl2, fileUrl1, orgId, caption1
+let orgId, caption1
 try {
 const msgGroup =  `**Firing**
-  
-Value: [ var='calc_threshold' labels={} value=0 ], [ var='is_true' labels={} value=1 ], [ var='total_success' labels={} value=3 ], [ var='total_failed' labels={} value=0 ], [ var='total_timeout' labels={} value=0 ], [ var='total_all' labels={} value=3 ], [ var='get_time_end' labels={} value=1.671094825004e+12 ], [ var='get_time_start' labels={} value=1.671093925003e+12 ]
-Labels:
- - alertname = DEV-CASH
- - grafana_folder = DEVGIBI
-Annotations:
- - Group = Hbj - monitor test
- - Org = 5
- - TIme = time_start = 1671432445018
-   time_end = 1671433345004
- - Description = Transaction PATK in 15 minutes has  0 % timeout rate transactions
- Timeout: 0
- Failed : 1
- Success : 3
- Total : 4
- - Summary = Gibi timeout threshold above 5%
 
-Source: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/alerting/grafana/Fp0dY55Vz/view
-Silence: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/alerting/silence/new?alertmanager=grafana&matcher=alertname%3DDEV-CASH&matcher=grafana_folder%3DDEVGIBI
-Dashboard: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/d/OeHCtCD4k
-Panel: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/d/iGW32xv4z?viewPanel=2	
+ Value: [ var='B0' metric='count' labels={} value=0 ]
+ Labels:
+  - alertname = Reuters FX Feed
+  - grafana_folder = IDC
+  - idc = reuters
+ Annotations:
+  - Org = 1
+  - description = No Description
+  - summary = Reuters in 5 minutes has no Transactions, please check Monitoring!
+ Source: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/alerting/grafana/CxGyRnO4z/view
+ Silence: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/alerting/silence/new?alertmanager=grafana&matcher=alertname%3DReuters+FX+Feed&matcher=grafana_folder%3DIDC&matcher=idc%3Dreuters
+ Dashboard: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/d/JEj0c6DVk
+ Panel: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/d/JEj0c6DVk?viewPanel=10
+
 `;
   
 //const words = str.split(' ');
@@ -35,9 +29,7 @@ Panel: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/d/iGW32xv4z?viewP
 
   const groupName = msgGroup.split('Group = ')[1].split('\n')[0];
   let validImage = true
-  if(msgGroup.split('time_end = ')[1] && msgGroup.split('time_start = ')[1]&& msgGroup.split(`Org = `)[1]){
-    fileUrl2= msgGroup.split('time_end = ')[1].split('\n')[0]
-    fileUrl1= msgGroup.split('time_start = ')[1].split('\n')[0]
+  if(msgGroup.split(`Org = `)[1]){
     orgId = msgGroup.split(`Org = `)[1].split(`\n`)[0]
     ;
   }
@@ -46,14 +38,15 @@ Panel: http://dev-middleware-api.hanabank.co.id/mdw-monitoring/d/iGW32xv4z?viewP
   }
   
   console.log(validImage,`=====>><<`)
-
+  const caption5 = msgGroup.split(`\n`)[0];
+  console.log(caption5,`======caption5`)
 const panel = msgGroup.split('/d/')[1].split('\n')[0];
 console.log(panel,`======fileurl2`)
 const panel1 = msgGroup.split('viewPanel=')[1].split('\n')[0];
 //const fileUrl = str.split('file =')[1].split(`\n`)[0];
-const caption0 = msgGroup.split('=')[25].split('\n')[0];
-const caption2 = msgGroup.split('Summary =')[1].split('\n')[0]
-const caption5 = msgGroup.split(`\n`)[0];
+const caption0 = msgGroup.split('alertname =')[1].split('\n')[0];
+const caption2 = msgGroup.split('summary =')[1].split('\n')[0]
+
 const link     = msgGroup.split('Source:')[1].split('\n')[0];
 const link1    = msgGroup.split('Silence:')[1].split('\n')[0];
 const link2    = msgGroup.split('Dashboard:')[1].split('\n')[0];
@@ -91,9 +84,9 @@ if (caption5 == '**Firing**') {
 
 
 
-  const fileUrl = `http://dev-middleware-api.hanabank.co.id/mdw-monitoring/render/d-solo/${panel}/mdw?orgId=${orgId}&refresh=1m&from=${fileUrl1}&to=${fileUrl2}&panelId=${panel1}&width=1000&height=500&tz=Asia%2FBangkok`
+  const fileUrl = `http://dev-middleware-api.hanabank.co.id/mdw-monitoring/render/d-solo/${panel}/mdw?orgId=${orgId}&refresh=1m&panelId=${panel1}&width=1000&height=500&tz=Asia%2FBangkok`
    
-  console.log(fileUrl,`<<<<=5`)
+
   let token;
   if(orgId =='5'){
     token = 'eyJrIjoiM2V3VVJlMlFCZnNMRG9kQUtYeGR6THhKUGd0Zm5vWDciLCJuIjoiY2FwdHVyZSIsImlkIjo1fQ=='
