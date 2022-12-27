@@ -74,67 +74,7 @@ const client = new Client({
   authStrategy: new LocalAuth()
 });
 
-// client.on('message', msg => {
-//   if (msg.body == '!ping') {
-//     msg.reply('pong');
-//   } else if (msg.body == 'good morning') {
-//     msg.reply('selamat pagi');
-//   } else if (msg.body == '!groups') {
-//     client.getChats().then(chats => {
-//       const groups = chats.filter(chat => chat.isGroup);
 
-//       if (groups.length == 0) {
-//         msg.reply('You have no group yet.');
-//       } else {
-//         let replyMsg = '*YOUR GROUPS*\n\n';
-//         groups.forEach((group, i) => {
-//           replyMsg += `ID: ${group.id._serialized}\nName: ${group.name}\n\n`;
-//         });
-//         replyMsg += '_You can use the group id to send a message to the group._'
-//         msg.reply(replyMsg);
-//       }
-//     });
-//   }
-
-//   // NOTE!
-//   // UNCOMMENT THE SCRIPT BELOW IF YOU WANT TO SAVE THE MESSAGE MEDIA FILES
-//   // Downloading media
-//   // if (msg.hasMedia) {
-//   //   msg.downloadMedia().then(media => {
-//   //     // To better understanding
-//   //     // Please look at the console what data we get
-//   //     console.log(media);
-
-//   //     if (media) {
-//   //       // The folder to store: change as you want!
-//   //       // Create if not exists
-//   //       const mediaPath = './downloaded-media/';
-
-//   //       if (!fs.existsSync(mediaPath)) {
-//   //         fs.mkdirSync(mediaPath);
-//   //       }
-
-//   //       // Get the file extension by mime-type
-//   //       const extension = mime.extension(media.mimetype);
-        
-//   //       // Filename: change as you want! 
-//   //       // I will use the time for this example
-//   //       // Why not use media.filename? Because the value is not certain exists
-//   //       const filename = new Date().getTime();
-
-//   //       const fullFilename = mediaPath + filename + '.' + extension;
-
-//   //       // Save to file
-//   //       try {
-//   //         fs.writeFileSync(fullFilename, media.data, { encoding: 'base64' }); 
-//   //         console.log('File downloaded successfully!', fullFilename);
-//   //       } catch (err) {
-//   //         console.log('Failed to save the file:', err);
-//   //       }
-//   //     }
-//   //   });
-//   // }
-// });
 
 client.initialize();
 
@@ -144,15 +84,10 @@ client.initialize();
 
   client.on('qr', (qr) => {
     qrcode.generate(qr, {small: true});
-    // qrcode.toDataURL(qr, (err, url) => {
-    //   socket.emit('qr', url);
-    //   socket.emit('message', 'QR Code received, scan please!');
-    //});
+   
   });
 
     client.on('ready', () => {
-//     socket.emit('ready', 'Whatsapp is ready!');
-//     socket.emit('message', 'Whatsapp is ready!');
     const nDate = new Date().toLocaleString('en-US', {
     timeZone: 'Asia/Jakarta'
     });
@@ -290,21 +225,7 @@ app.post('/send-message', [
 });
 
 
-// app.get("/image", function(req, res){
-//   const url = "http://dev-middleware-api.hanabank.co.id/mdw-monitoring/render/d-solo/1YPm51H4z/mdw?from=1670387670795&height=500&orgId=1&panelId=2&refresh=1m&to=1670388564026&tz=Asia%2FBangkok&width=1000";
 
-//   https.get(url, function(response){
-
-//     response.on("data", function(data){
-//       const weatherData = JSON.parse(data)
-//       const icon = weatherData.weather[0].icon
-//       const imageUrl = "http://dev-middleware-api.hanabank.co.id" + icon + "@2x.png"
-
-//       res.write("<img src=" + imageUrl + " ></img>")
-//       res.send();
-//     })
-//   });
-//})
 
 // Send media
 app.post('/send-media', async (req, res) => {
@@ -460,20 +381,12 @@ app.post('/send-group-message', [
 let  orgId, caption1
 try {
 const msgGroup = req.body.message;
-console.log(nDate,`============>`,msgGroup,`<=========DARI GRAFANA`)
-  //const words = str.split(' ');
-  // const groupName =   msgGroup.split('=')[8].split(' ')[1];
-  // const caption = msgGroup.split('=')[9].split('file')[0];
-  // const fileUrl = msgGroup.split('=')[10].split('\n')[0];
-  // console.log(groupName,'<1')
-  // console.log(caption,'<2')
-  // console.log(fileUrl,'<3')
-  //const words = str.split(' ');
+console.log(nDate,`DARI GRAFANA============>`,msgGroup,`<=========DARI GRAFANA`)
+
 
   const groupName = msgGroup.split('Group = ')[1].split('\n')[0];
-  const groupName2 = "Test";
-  console.log( "groupName2 : " + groupName2   );
-  console.log(groupName,`=====group`)
+  const group2 = groupName.split('&');
+
   let validImage = true
   if(msgGroup.split(`Org = `)[1]){
     orgId = msgGroup.split(`Org = `)[1].split(`\n`)[0]
@@ -483,16 +396,14 @@ console.log(nDate,`============>`,msgGroup,`<=========DARI GRAFANA`)
    validImage = false
   }
   
-  console.log(validImage,`=====>><<`)
+
    
   
   
   
  
 const panel = msgGroup.split('/d/')[1].split('\n')[0];
-//console.log(panel,`======fileurl2`)
 const panel1 = msgGroup.split('viewPanel=')[1].split('\n')[0];
-//const fileUrl = str.split('file =')[1].split(`\n`)[0];
 const caption0 = msgGroup.split('alertname =')[1].split('\n')[0];
 const caption2 = msgGroup.split('summary =')[1].split('\n')[0]
 const caption5 = msgGroup.split(`\n`)[0];
@@ -507,11 +418,6 @@ if(msgGroup.split('description =')[1]){
  caption1 = "No Description"
 }
 
-// if(msgGroup.split('Summary =')[1]){
-//  caption2 = msgGroup.split('Summary =')[1].split('\n')[0]
-// }else{
-// caption2 = "No Summary"
-// }
 
 
 
@@ -519,18 +425,16 @@ let caption;
 if (caption5 == '**Firing**') {
   let tempMessage = `     *==HANA MDW MONITORING${caption0}==*  \n \n\n*Description*: ${caption1}  \n\n *Summary*: ${caption2} \n\n    *===  Please Check Monitoring!‼️  ===*  
   \nSource      : ${link} \n\nSilence   : ${link1}  \n\nDashboard   : ${link2} \n\nPanel       : ${link3}`;
-  // console.log(tempMessage);
   caption = tempMessage
 } else {
   let tempMessage = `     *==HANA MDW MONITORING${caption0}==*  \n \n\n*Description*: ${caption1}  \n\n *Summary*: ${caption2} \n\n         *=== Now It's OKayy   ✅===*
   \nSource      : ${link} \n\nSilence   : ${link1}  \n\nDashboard   : ${link2} \n\nPanel       : ${link3}`; 
-  // console.log(tempMessage)
   caption = tempMessage
 }
 
 
   console.log(caption5,`<== buat check alert`)
-  console.log(`INI CAPTION ==========>`,caption,`<========`)
+  console.log(`INI CAPTION ==========>`,caption,`<======== INI CAPTION`)
  
   const fileUrl = `http://dev-middleware-api.hanabank.co.id/mdw-monitoring/render/d-solo/${panel}/mdw?orgId=${orgId}&refresh=1m&panelId=${panel1}&width=1000&height=500&tz=Asia%2FBangkok`
    
@@ -544,35 +448,10 @@ if (caption5 == '**Firing**') {
     console.log(`Orgid tidak ditemukan`)
     )
 
-  // console.log(token,`<3`)
-  // console.log(groupName,`<4`)
-
-  // console.log(panel,`panelll`)
-  // console.log(panel1,`panelll---1`)
-  console.log( "groupName2 : " + groupName2   )
-  console.log(groupName,`=====group`)
+  
   let chatId = req.body.id;
-  // const groupName = req.body.name;
-  // const message = req.body.message;
-  let chatId2 = req.body.id;
-  // Find the group by name
- 
-  if (!chatId && !chatId2) {
-    const group = await findGroupByName(groupName)
-    const group2 = await findGroupByName(groupName2)
-    console.log(group,`groupp2`)
-    if (!group && !group2) {
-      return res.status(422).json({
-        status: false,
-        message: 'No group found with name: ' + groupName,
-        message2: 'No group found with name: ' + groupName2
-      });
-    }
+  
 
-    chatId = group.id._serialized;
-    chatId2 = group2.id._serialized;
-
-  } 
 
 
   let media
@@ -592,45 +471,49 @@ if (caption5 == '**Firing**') {
     media = MessageMedia.fromFilePath('./warning.png');
  
   }
- 
 
-    const array = [chatId, chatId2];
-    let groups = [];
-    let promises = [];
-    for (i = 0; i < array.length; i++) {
-      promises.push(
-        client.sendMessage(array[i], media,  {
-          caption: caption
-        } ).then(response => {
-          groups.push(response)
-          
-       
-         // console.log(chatId,`========>chatiddd`)
-        })
-      )
-    }
-    Promise.all(promises).then(() => 
-    {
-
-      res.status(200).json({
-        status: true,
-        response: groups
+  let chatsarray = [];
+  let promise = [];
+  let groups = [];
+  console.log(group2)
+  for (i = 0; i < group2.length; i++) {
+    // console.log(group2.length,`length`)
+    // console.log(i,`i++`)
+    // console.log(group2[i],`group2[i]`)
+   
+    promise.push(
+      findGroupByName(group2[i]).then(response => {
+       client.sendMessage(response.id._serialized, media,  {
+        caption: caption
+      } ).then(response =>{
+        groups.push(response)
+        return response
+      }).catch(err =>{
+        return err
       })
-      console.log(groups)
-    }).catch(err => {
-      res.status(500).json({
-        status: false,
-        response: err
-      });
-    });
-    
-  // for (let index = 0; index < allGroup.length; index++) {
-  //     const group = allGroup[index];
-  //     console.log(group,`<====group1`);
+      return response
+    }).catch(err=>{
+      return err
+    })
+    )} 
+     
   
+  Promise.all(promise).then((response) => 
+   {
+    console.log(`INI RESPONSE ==========> `,response,`<======= INI RESPONSE`)
+     res.status(200).json({
+       status: true,
+       response: response
+     })
+   }).catch(err => {
+    console.log(`INI RESPONSE ==========> `,err,`<======= INI RESPONSE`)
+     res.status(500).json({
+       status: false,
+       response: err
+     });
+   });
 
-      
-  //}  
+
 } catch (error) {
   console.log(error,`<+++++`)
 }
