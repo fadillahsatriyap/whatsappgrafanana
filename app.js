@@ -10,6 +10,7 @@ const { phoneNumberFormatter } = require('./helpers/formatter');
 const fileUpload = require('express-fileupload');
 const axios = require('axios');
 const { group } = require('console');
+const jwt = require(`jsonwebtoken`);
 //const mime = require('mime-types');
 //require('log-timestamp');
 
@@ -366,42 +367,28 @@ app.post('/send-group-message', [
     return msg;
   });
 
-  // if (!errors.isEmpty()) {
-  //   return res.status(422).json({
-  //     status: false,
-  //     message: errors.mapped()
-  //   });
-  // }
   const nDate = new Date().toLocaleString('en-US', {
     timeZone: 'Asia/Jakarta'
     });
     
-  
-  
-let  orgId, caption1
+let   caption1
 try {
 const msgGroup = req.body.message;
+//let tokenAlert = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvcmciOjEsImdyb3VwcyI6WyJoYmotbW9uaXRvcmluZyIsInRlc3QiLCJwcmV0ZXN0Il0sImlhdCI6MTY3MjEyOTQ1M30.b_koYddtlE6yDbpQlmK2ibNEHBNqrhA2oxCApR3Vqg4`;
+let tokenAlert = req.header('Authorization')
+let bearer = tokenAlert.split(' ')[1];
+console.log(req.header('Authorization'), 'header')
+let decoded = jwt.verify(bearer, 'nyan');
+console.log(`====>decoded`,decoded,`<=====decoded`)
 console.log(nDate,`DARI GRAFANA============>`,msgGroup,`<=========DARI GRAFANA`)
 
-
-  const groupName = msgGroup.split('Group = ')[1].split('\n')[0];
-  const group2 = groupName.split('&');
-
-  let validImage = true
-  if(msgGroup.split(`Org = `)[1]){
-    orgId = msgGroup.split(`Org = `)[1].split(`\n`)[0]
-    ;
-  }
-  else{
-   validImage = false
-  }
-  
-
-   
-  
-  
-  
- 
+  const token = decoded.token
+  const group2 =  decoded.group
+  const orgId = decoded.org
+  let validImage =true
+  if(!orgId){
+      validImage = false
+   }
 const panel = msgGroup.split('/d/')[1].split('\n')[0];
 const panel1 = msgGroup.split('viewPanel=')[1].split('\n')[0];
 const caption0 = msgGroup.split('alertname =')[1].split('\n')[0];
@@ -418,9 +405,6 @@ if(msgGroup.split('description =')[1]){
  caption1 = "No Description"
 }
 
-
-
-
 let caption;
 if (caption5 == '**Firing**') {
   let tempMessage = `     *==HANA MDW MONITORING${caption0}==*  \n \n\n*Description*: ${caption1}  \n\n *Summary*: ${caption2} \n\n    *===  Please Check Monitoring!‼️  ===*  
@@ -432,29 +416,15 @@ if (caption5 == '**Firing**') {
   caption = tempMessage
 }
 
-
-  console.log(caption5,`<== buat check alert`)
+  //console.log(caption5,`<== buat check alert`)
   console.log(`INI CAPTION ==========>`,caption,`<======== INI CAPTION`)
- 
+
   const fileUrl = `http://dev-middleware-api.hanabank.co.id/mdw-monitoring/render/d-solo/${panel}/mdw?orgId=${orgId}&refresh=1m&panelId=${panel1}&width=1000&height=500&tz=Asia%2FBangkok`
    
   console.log(fileUrl,`<<<<= check link`)
-  let token;
-  if(orgId =='5'){
-    token = 'eyJrIjoiM2V3VVJlMlFCZnNMRG9kQUtYeGR6THhKUGd0Zm5vWDciLCJuIjoiY2FwdHVyZSIsImlkIjo1fQ=='
-  }else if (orgId=='1'){
-    token = `glsa_A3LzmJIOMe92vRLuktAwnoqef0RsTtwy_842a36e3`
-  }else(
-    console.log(`Orgid tidak ditemukan`)
-    )
 
-  
   let chatId = req.body.id;
-  
-
-
-
-  let media
+  let media,mimetype
   if(validImage){
     attachment = await axios.get(fileUrl, {
       responseType: 'arraybuffer',
@@ -462,14 +432,15 @@ if (caption5 == '**Firing**') {
     }).then(response => {
       console.log(response.data,`<<<===>>>4`)
       mimetype = response.headers['content-type'];
-      return response.data.toString('base64');
+      let attach = response.data.toString('base64');
+      media = new MessageMedia(mimetype, attach, 'Media');
     }).catch(error=>{
-      console.log(error)
+      console.log("image tidak valid")
+      media = MessageMedia.fromFilePath('./warning.png');
     });
-     media = new MessageMedia(mimetype, attachment, 'Media');
+    
   }else{
     media = MessageMedia.fromFilePath('./warning.png');
- 
   }
 
   let chatsarray = [];
@@ -477,10 +448,6 @@ if (caption5 == '**Firing**') {
   let groups = [];
   console.log(group2)
   for (i = 0; i < group2.length; i++) {
-    // console.log(group2.length,`length`)
-    // console.log(i,`i++`)
-    // console.log(group2[i],`group2[i]`)
-   
     promise.push(
       findGroupByName(group2[i]).then(response => {
        client.sendMessage(response.id._serialized, media,  {
@@ -497,7 +464,6 @@ if (caption5 == '**Firing**') {
     })
     )} 
      
-  
   Promise.all(promise).then((response) => 
    {
     console.log(`INI RESPONSE ==========> `,response,`<======= INI RESPONSE`)
@@ -513,13 +479,10 @@ if (caption5 == '**Firing**') {
      });
    });
 
-
 } catch (error) {
   console.log(error,`<+++++`)
 }
 });
-
-
 
 app.post('/clear-message', [
   body('number').notEmpty(),
@@ -538,7 +501,6 @@ app.post('/clear-message', [
   }
 
   const number = phoneNumberFormatter(req.body.number);
-
   const isRegisteredNumber = await checkRegisteredNumber(number);
 
   if (!isRegisteredNumber) {
@@ -549,7 +511,6 @@ app.post('/clear-message', [
   }
 
   const chat = await client.getChatById(number);
-  
   chat.clearMessages().then(status => {
     res.status(200).json({
       status: true,
